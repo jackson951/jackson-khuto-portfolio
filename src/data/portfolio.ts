@@ -93,7 +93,7 @@ export const profile = {
   location: 'Midrand, Gauteng, South Africa',
   tagline: 'Building systems that work, scale, and last.',
   email: 'jacksonkhuto591@gmail.com',
-  phone: '06 618 0274',
+  phone: '066 180 2747',
   github: 'https://github.com/jackson951',
   linkedin: 'https://www.linkedin.com/in/jackson-khuto-03533437b/',
   summary:
@@ -111,30 +111,19 @@ export interface ExperienceEntry {
 
 export const experience: ExperienceEntry[] = [
   {
-    role: 'Graduate Software Developer',
+    role: 'Software Developer',
     company: 'Barloworld Equipment',
     location: 'Isando, Gauteng',
     period: 'Dec 2025 — Present',
     current: true,
     bullets: [
-      'Build internal business applications using React.js and Tailwind CSS on the frontend, with Express.js and Spring Boot powering backend services depending on application requirements.',
-      'Integrated Microsoft SharePoint as a document management layer within internal tools, enabling structured content access directly from business applications.',
-      'Implemented authentication and access control using Microsoft Entra ID (Azure AD), securing internal applications with role-based access aligned to organisational identity policies.',
-      'Manage application deployments across both IIS (on-premise) and Microsoft Azure, navigating environment-specific configurations to ensure stable and reliable releases.',
-      'Work within an Agile delivery team, contributing to sprint planning and code reviews while consistently applying feedback to improve solution quality and maintainability.',
-    ],
-  },
-  {
-    role: 'Software Developer Learnership',
-    company: 'Bluu Car Rental',
-    location: 'Kempton Park, Gauteng',
-    period: 'Feb 2025 — Jul 2025',
-    bullets: [
-      'Developed and shipped internal business features using C# and ASP.NET Core on the backend and React.js on the frontend, working across the full stack from requirements to production.',
-      'Designed and maintained relational database schemas in SQL Server, writing and optimising queries to support business operations while enforcing data integrity in a live environment.',
-      'Built and consumed RESTful APIs to connect frontend and backend systems, troubleshooting data-flow issues and supporting internal users through to resolution.',
-      'Deployed applications to Microsoft Azure, gaining practical exposure to cloud hosting, environment configuration, and CI/CD pipeline behaviour in a production context.',
-      'Participated in Agile ceremonies and peer code reviews, developing habits around structured delivery and incorporating senior feedback to steadily improve code quality.',
+      'Build and enhance enterprise internal applications across the full SDLC, from stakeholder requirements and feature design through testing, UAT, deployment, production support, and ongoing maintenance.',
+      'Develop React and TypeScript interfaces for dashboards, request workflows, reports, filters, forms, role-based views, loading states, validation, and responsive layouts used by business teams.',
+      'Implement backend functionality with Node.js, Express, REST APIs, service layers, scheduled jobs, request validation, error handling, and database access patterns for operational business processes.',
+      'Design and maintain SQL Server and PostgreSQL data flows using Prisma ORM, including schema changes, migrations, CRUD operations, transactions, and query troubleshooting.',
+      'Secure applications with Microsoft Entra ID, MSAL, JWT authentication, protected routes, role-based access control, Azure App Registrations, and Microsoft Graph integrations.',
+      'Deliver enterprise application enhancements including approval workflows, request management, dashboards, Excel reporting, audit logs, SAP-related process support, and usability improvements based on user feedback.',
+      'Support deployments and enterprise operations across IIS, Azure, PM2, environment configuration, build troubleshooting, change management, CAB processes, and technical documentation.',
     ],
   },
 ];
