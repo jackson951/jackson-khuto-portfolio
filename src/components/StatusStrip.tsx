@@ -11,8 +11,9 @@ export const StatusStrip = () => {
             <span className="h-1.5 w-1.5 rounded-full bg-copper animate-pulse" />
             <span className="text-muted">system.status</span>
           </span>
-          <span className="shrink-0 text-line">│</span>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span className="shrink-0 text-line">|</span>
+          <span className="text-muted sm:hidden">junior+ roles</span>
+          <div className="hidden flex-wrap items-center gap-x-4 gap-y-1 sm:flex">
             {flatStack.map((item) => (
               <span key={item} className="whitespace-nowrap">
                 <span className="text-copper/70">●</span>{' '}

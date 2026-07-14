@@ -1,0 +1,12 @@
+[2026-07-14T08:23:59.513Z] [INFO] ========================================================================================================================
+[2026-07-14T08:23:59.513Z] [INFO] Initializing MAM Client.
+App: com.microsoft.edge 150.0.4078.48
+SDK: 2.1.367.0
+OS: windows 10.0.26200.8655
+DeviceType: Desktop
+Manufacturer: Dell Inc.
+Model: Dell Pro 14 Plus PB14250
+Telemetry: yes
+Managed device support: enabled
+[2026-07-14T08:23:59.513Z] [INFO] Telemetry session 09ea5861-98f2-4a8a-b6dc-f685b216a528.
+[2026-07-14T08:23:59.514Z] [INFO] Initializing cache (v1).

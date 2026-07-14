@@ -19,7 +19,7 @@ export const Stack = () => {
           <div className="divide-y divide-line bg-panel">
             {stackGroups.map((group) => (
               <div key={group.label} className="flex flex-col gap-3 px-5 py-5 sm:flex-row sm:items-baseline sm:gap-8">
-                <div className="shrink-0 font-mono text-xs uppercase tracking-wider text-slate sm:w-36">
+                <div className="shrink-0 font-mono text-xs uppercase text-slate sm:w-36">
                   {group.label}
                 </div>
                 <div className="flex flex-wrap gap-2">

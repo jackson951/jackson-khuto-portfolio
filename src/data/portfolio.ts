@@ -11,6 +11,8 @@ export interface Project {
   highlights: string[];
 }
 
+export const featuredProjectId = 'flexileave';
+
 export const projects: Project[] = [
   {
     id: 'streetluxcity-shop',
@@ -77,6 +79,33 @@ export const projects: Project[] = [
   },
 ];
 
+export const buildAreas = [
+  {
+    title: 'Enterprise Applications',
+    body: 'Internal tools that support real business processes, approvals, records, and day-to-day operations.',
+  },
+  {
+    title: 'Workflow Automation',
+    body: 'Request flows, approval rules, status tracking, notifications, and business logic that reduce manual work.',
+  },
+  {
+    title: 'Secure APIs',
+    body: 'REST APIs with validation, authentication, authorization, service layers, and predictable data contracts.',
+  },
+  {
+    title: 'Dashboards & Reporting',
+    body: 'Operational dashboards, filters, exports, audit history, and reporting views that make work visible.',
+  },
+  {
+    title: 'Identity Integration',
+    body: 'Microsoft Entra ID, MSAL, JWT, protected routes, role-based access, and Microsoft Graph integrations.',
+  },
+  {
+    title: 'Database Design',
+    body: 'Relational schemas, migrations, CRUD flows, transactions, query troubleshooting, and data integrity.',
+  },
+];
+
 export const stackGroups: { label: string; items: string[] }[] = [
   { label: 'languages', items: ['C#', 'TypeScript', 'JavaScript', 'SQL'] },
   { label: 'frontend', items: ['React.js', 'Next.js', 'Tailwind CSS'] },
@@ -91,13 +120,12 @@ export const profile = {
   name: 'Jackson Khuto',
   role: 'Full-Stack Software Developer',
   location: 'Midrand, Gauteng, South Africa',
-  tagline: 'Building systems that work, scale, and last.',
   email: 'jacksonkhuto591@gmail.com',
   phone: '066 180 2747',
   github: 'https://github.com/jackson951',
   linkedin: 'https://www.linkedin.com/in/jackson-khuto-03533437b/',
   summary:
-    'Full-stack software developer with practical experience building and shipping production applications using C#, ASP.NET Core, React.js, and SQL Server. Comfortable across the full development lifecycle — from database design and API integration through to cloud deployment on Microsoft Azure. Works well in Agile teams, values clean and maintainable code, and picks up new requirements quickly.',
+    'I approach software by first understanding the business process, the users involved, and the data that needs to move through the system. From there, I design maintainable features with clear separation between the interface, API, business logic, and database layers. I care about secure authentication, role-based access, reliable workflows, useful reporting, and interfaces that are simple for people to use. My goal is to build systems that solve the real problem, are easy to support, and can grow without becoming fragile.',
 };
 
 export interface ExperienceEntry {
@@ -106,8 +134,39 @@ export interface ExperienceEntry {
   location: string;
   period: string;
   current?: boolean;
-  bullets: string[];
 }
+
+export const experienceImpactGroups = [
+  {
+    title: 'Enterprise Application Development',
+    points: [
+      'Build and enhance internal applications across requirements, feature design, implementation, testing, UAT, deployment, support, and maintenance.',
+      'Develop React and TypeScript interfaces for dashboards, forms, filters, request workflows, validation states, and responsive business screens.',
+      'Implement backend functionality with Node.js, Express, REST APIs, service layers, scheduled jobs, validation, error handling, and database access patterns.',
+    ],
+  },
+  {
+    title: 'Identity & Security',
+    points: [
+      'Secure applications with Microsoft Entra ID, MSAL, JWT authentication, protected routes, and role-based access control.',
+      'Work with Azure App Registrations, enterprise identity configuration, token handling, and Microsoft Graph integrations.',
+    ],
+  },
+  {
+    title: 'Business Processes & Reporting',
+    points: [
+      'Deliver approval workflows, request management, dashboards, Excel reporting, audit logs, and SAP-related process support.',
+      'Translate business requirements into usable application flows with clearer navigation, cleaner layouts, and user-focused improvements.',
+    ],
+  },
+  {
+    title: 'Delivery & Support',
+    points: [
+      'Support IIS and Azure deployments, PM2 process management, environment configuration, build troubleshooting, and release fixes.',
+      'Contribute to UAT support, bug fixing, technical documentation, change management, CAB processes, and production enhancements.',
+    ],
+  },
+];
 
 export const experience: ExperienceEntry[] = [
   {
@@ -116,15 +175,6 @@ export const experience: ExperienceEntry[] = [
     location: 'Isando, Gauteng',
     period: 'Dec 2025 — Present',
     current: true,
-    bullets: [
-      'Build and enhance enterprise internal applications across the full SDLC, from stakeholder requirements and feature design through testing, UAT, deployment, production support, and ongoing maintenance.',
-      'Develop React and TypeScript interfaces for dashboards, request workflows, reports, filters, forms, role-based views, loading states, validation, and responsive layouts used by business teams.',
-      'Implement backend functionality with Node.js, Express, REST APIs, service layers, scheduled jobs, request validation, error handling, and database access patterns for operational business processes.',
-      'Design and maintain SQL Server and PostgreSQL data flows using Prisma ORM, including schema changes, migrations, CRUD operations, transactions, and query troubleshooting.',
-      'Secure applications with Microsoft Entra ID, MSAL, JWT authentication, protected routes, role-based access control, Azure App Registrations, and Microsoft Graph integrations.',
-      'Deliver enterprise application enhancements including approval workflows, request management, dashboards, Excel reporting, audit logs, SAP-related process support, and usability improvements based on user feedback.',
-      'Support deployments and enterprise operations across IIS, Azure, PM2, environment configuration, build troubleshooting, change management, CAB processes, and technical documentation.',
-    ],
   },
 ];
 
@@ -132,12 +182,4 @@ export const education = {
   degree: 'BSc Information Technology',
   school: 'North-West University, Vanderbijlpark',
   period: 'Feb 2022 – Dec 2024',
-  detail: 'Data Structures, Algorithms, DB Management, Software Engineering, OOP, Security',
 };
-
-export const certifications: string[] = [
-  'JS Algorithms & Data Structures — freeCodeCamp',
-  'Intro to REST APIs — Great Learning',
-  'Data Analytics (Excel) — Great Learning',
-  'CompTIA A+ & Network+ — in progress',
-];

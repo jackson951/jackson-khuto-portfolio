@@ -4,10 +4,11 @@ import { GithubIcon, LinkedinIcon } from './BrandIcons';
 import { profile } from '../data/portfolio';
 
 const routes = [
-  { label: 'about', href: '#about' },
+  { label: 'build', href: '#build' },
+  { label: 'work', href: '#work' },
   { label: 'experience', href: '#experience' },
   { label: 'stack', href: '#stack' },
-  { label: 'work', href: '#work' },
+  { label: 'about', href: '#about' },
   { label: 'contact', href: '#contact' },
 ];
 
@@ -28,7 +29,7 @@ export const Header = () => {
       }`}
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href="#top" className="font-mono text-sm font-semibold tracking-tight text-paper">
+        <a href="#top" className="font-mono text-sm font-semibold text-paper">
           jackson<span className="text-copper">.</span>khuto
         </a>
 

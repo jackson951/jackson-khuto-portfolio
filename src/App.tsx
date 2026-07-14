@@ -1,6 +1,7 @@
 import { Header } from './components/Header';
 import { StatusStrip } from './components/StatusStrip';
 import { Hero } from './components/Hero';
+import { WhatIBuild } from './components/WhatIBuild';
 import { About } from './components/About';
 import { Experience } from './components/Experience';
 import { Stack } from './components/Stack';
@@ -15,10 +16,11 @@ function App() {
       <StatusStrip />
       <main>
         <Hero />
-        <About />
+        <WhatIBuild />
+        <Work />
         <Experience />
         <Stack />
-        <Work />
+        <About />
         <Contact />
       </main>
       <Footer />

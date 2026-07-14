@@ -22,16 +22,17 @@ export const About = () => {
         <div className="font-mono text-xs text-copper">/about</div>
 
         <h2 className="mt-4 max-w-2xl text-2xl font-semibold leading-snug text-paper sm:text-3xl">
-          A full-stack engineer who treats clean code and clean interfaces
-          as the same discipline.
+          How I approach software.
         </h2>
 
         <p className="mt-6 max-w-2xl font-mono text-sm leading-7 text-muted sm:text-base">
           {profile.summary}
         </p>
 
-        <p className="mt-4 max-w-2xl font-mono text-xs text-slate">
-          {education.degree} · {education.school} · {education.period}
+        <p className="mt-4 max-w-2xl font-mono text-xs leading-6 text-slate">
+          {education.degree} foundation in software engineering, databases,
+          security, and object-oriented programming · {education.school} ·{' '}
+          {education.period}
         </p>
 
         <div className="mt-14 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
