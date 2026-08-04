@@ -1,0 +1,149 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Length 3358 >>
+stream
+BT
+/F1 24 Tf
+50 800.00 Td
+(Jackson Khuto) Tj
+-50 -22 Td
+/F1 12 Tf
+50 778.00 Td
+(Full-Stack Software Developer) Tj
+-50 -18 Td
+/F1 9 Tf
+50 760.00 Td
+(Midrand, Gauteng, South Africa | jacksonkhuto591@gmail.com | 066 180 2747) Tj
+-50 -13 Td
+/F1 9 Tf
+50 747.00 Td
+(GitHub: github.com/jackson951 | LinkedIn: linkedin.com/in/jackson-khuto-03533437b) Tj
+-50 -24 Td
+/F2 13 Tf
+50 723.00 Td
+(Professional Summary) Tj
+-50 -16 Td
+/F1 9.5 Tf
+50 707.00 Td
+(Full-stack software developer focused on enterprise web applications, secure APIs, workflow automation, reporting tools, and maintainable business systems.) Tj
+-50 -13 Td
+/F1 9.5 Tf
+50 694.00 Td
+(Experienced across React, TypeScript, Node.js, Express, Spring Boot, SQL databases, Microsoft Entra ID, MSAL, JWT authentication, and deployment support.) Tj
+-50 -22 Td
+/F2 13 Tf
+50 672.00 Td
+(Experience) Tj
+-50 -16 Td
+/F2 10 Tf
+50 656.00 Td
+(Software Developer - Barloworld Equipment | Isando, Gauteng | Dec 2025 - Present) Tj
+-50 -14 Td
+/F1 9.2 Tf
+50 642.00 Td
+(- Build and enhance internal applications across requirements, implementation, testing, UAT, deployment, support, and maintenance.) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 630.00 Td
+(- Develop React and TypeScript interfaces for dashboards, forms, filters, request workflows, validation states, and responsive business screens.) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 618.00 Td
+(- Implement backend functionality with Node.js, Express, REST APIs, service layers, scheduled jobs, validation, error handling, and database access patterns.) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 606.00 Td
+(- Secure applications with Microsoft Entra ID, MSAL, JWT authentication, protected routes, and role-based access control.) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 594.00 Td
+(- Support IIS and Azure deployments, PM2 process management, environment configuration, build troubleshooting, and release fixes.) Tj
+-50 -22 Td
+/F2 13 Tf
+50 572.00 Td
+(Selected Projects) Tj
+-50 -16 Td
+/F1 9.2 Tf
+50 556.00 Td
+(FlexiLeave - Full-stack leave management system with JWT authentication, role-based access control, PostgreSQL, and responsive React UI.) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 544.00 Td
+(StreetLuxCity - E-commerce storefront built with Next.js, TypeScript, Tailwind CSS, Spring Boot API integration, and Capacitor mobile packaging.) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 532.00 Td
+(StreetLuxCity API - Spring Boot REST API powering storefront catalog, order, and relational data workflows.) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 520.00 Td
+(StackMap - AI-powered codebase intelligence platform for GitHub repository analysis and natural-language Q&A.) Tj
+-50 -22 Td
+/F2 13 Tf
+50 498.00 Td
+(Technical Skills) Tj
+-50 -16 Td
+/F1 9.2 Tf
+50 482.00 Td
+(Languages: C#, TypeScript, JavaScript, SQL) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 470.00 Td
+(Frontend: React.js, Next.js, Tailwind CSS) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 458.00 Td
+(Backend: ASP.NET Core, Express.js, Spring Boot) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 446.00 Td
+(Databases: SQL Server, PostgreSQL, MongoDB) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 434.00 Td
+(Cloud & Deployment: Microsoft Azure, IIS, Docker, GitHub Actions) Tj
+-50 -12 Td
+/F1 9.2 Tf
+50 422.00 Td
+(Microsoft Ecosystem: MS Entra ID, SharePoint, Microsoft Graph) Tj
+-50 -22 Td
+/F2 13 Tf
+50 400.00 Td
+(Education) Tj
+-50 -16 Td
+/F1 9.5 Tf
+50 384.00 Td
+(BSc Information Technology - North-West University, Vanderbijlpark - Feb 2022 - Dec 2024) Tj
+-50 -12 Td
+ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000000321 00000 n 
+0000000396 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+3806
+%%EOF

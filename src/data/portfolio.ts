@@ -4,6 +4,11 @@ export interface Project {
   path: string;
   description: string;
   longDescription: string;
+  problem: string;
+  solution: string;
+  architecture: string[];
+  challenges: string[];
+  lessons: string[];
   stack: string[];
   status: 'live' | 'api' | 'archived';
   repoUrl: string;
@@ -21,6 +26,13 @@ export const projects: Project[] = [
     description: 'E-commerce storefront with native mobile packaging',
     longDescription:
       'A full e-commerce storefront built on Next.js, wired to a Spring Boot REST API and packaged with Capacitor so the same codebase ships as a native mobile app alongside the web build.',
+    problem:
+      'The storefront needed to present products cleanly across web and mobile without splitting the customer experience into separate codebases.',
+    solution:
+      'Built a responsive Next.js storefront and packaged it with Capacitor so the product experience could move between browser and native shells.',
+    architecture: ['Next.js storefront', 'Spring Boot REST API', 'Relational data layer', 'Capacitor mobile shell'],
+    challenges: ['Keeping the responsive storefront usable across small screens', 'Aligning frontend product flows with backend API contracts'],
+    lessons: ['Shared codebases work best when UI states and API contracts stay explicit', 'Mobile packaging decisions affect web architecture early'],
     stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Capacitor'],
     status: 'live',
     repoUrl: 'https://github.com/jackson951/streetluxcity-shop',
@@ -37,6 +49,13 @@ export const projects: Project[] = [
     description: 'Spring Boot REST API powering the storefront',
     longDescription:
       'The backend service for StreetLuxCity — a Spring Boot REST API handling catalog, orders, and the data layer behind the storefront.',
+    problem:
+      'The storefront required a predictable API layer for product and order data instead of coupling business rules directly into the UI.',
+    solution:
+      'Designed a Spring Boot REST service with clear endpoints and a relational persistence layer for the e-commerce workflow.',
+    architecture: ['Spring Boot controllers', 'Service layer', 'Repository/data layer', 'Storefront REST clients'],
+    challenges: ['Designing routes that stay stable as storefront needs evolve', 'Keeping persistence concerns separated from request handling'],
+    lessons: ['A clear API boundary makes frontend changes safer', 'Backend structure matters even in small commerce systems'],
     stack: ['Java', 'Spring Boot', 'REST', 'SQL'],
     status: 'api',
     repoUrl: 'https://github.com/jackson951/api.streetluxcity',
@@ -52,6 +71,13 @@ export const projects: Project[] = [
     description: 'Full-stack leave management system',
     longDescription:
       'A full-stack web application for managing employee leave requests, with secure JWT authentication, role-based access control, and a modern responsive interface.',
+    problem:
+      'Leave requests become hard to manage when balances, approvals, roles, and request history live in disconnected manual processes.',
+    solution:
+      'Built a role-aware leave platform with authenticated request submission, approval workflows, PostgreSQL-backed records, and a responsive React interface.',
+    architecture: ['React request UI', 'Node.js / Express API', 'PostgreSQL schema', 'JWT authentication', 'Role-based access control'],
+    challenges: ['Modeling leave status changes cleanly', 'Protecting user and approver actions with role-aware API checks'],
+    lessons: ['Workflow products need state design before screen design', 'Authentication details shape both frontend routes and backend contracts'],
     stack: ['React', 'Node.js', 'PostgreSQL', 'JWT'],
     status: 'live',
     repoUrl: 'https://github.com/jackson951/flexileave-app',
@@ -68,6 +94,13 @@ export const projects: Project[] = [
     description: 'AI-powered codebase intelligence platform',
     longDescription:
       'A platform that connects to GitHub repositories and lets developers ask natural-language questions about a codebase. StackMap uses AI to analyse code structure and dependencies to speed up onboarding.',
+    problem:
+      'Developers joining unfamiliar repositories lose time understanding structure, dependencies, and where important logic lives.',
+    solution:
+      'Built a GitHub-connected platform for natural-language codebase exploration backed by analysis of repository structure and dependencies.',
+    architecture: ['TypeScript client', 'Node.js service', 'GitHub repository ingestion', 'AI question-answering flow'],
+    challenges: ['Turning repository structure into useful context', 'Designing a useful Q&A flow without overwhelming the user'],
+    lessons: ['AI features need strong information architecture', 'Developer tools should expose confidence and context, not just answers'],
     stack: ['TypeScript', 'Node.js', 'AI Integration'],
     status: 'live',
     repoUrl: 'https://github.com/jackson951/stackmap',
@@ -76,33 +109,6 @@ export const projects: Project[] = [
       'Analyses code structure and dependency graphs',
       'Paired client (stackmap) and server (Stackmap-Server) architecture',
     ],
-  },
-];
-
-export const buildAreas = [
-  {
-    title: 'Enterprise Applications',
-    body: 'Internal tools that support real business processes, approvals, records, and day-to-day operations.',
-  },
-  {
-    title: 'Workflow Automation',
-    body: 'Request flows, approval rules, status tracking, notifications, and business logic that reduce manual work.',
-  },
-  {
-    title: 'Secure APIs',
-    body: 'REST APIs with validation, authentication, authorization, service layers, and predictable data contracts.',
-  },
-  {
-    title: 'Dashboards & Reporting',
-    body: 'Operational dashboards, filters, exports, audit history, and reporting views that make work visible.',
-  },
-  {
-    title: 'Identity Integration',
-    body: 'Microsoft Entra ID, MSAL, JWT, protected routes, role-based access, and Microsoft Graph integrations.',
-  },
-  {
-    title: 'Database Design',
-    body: 'Relational schemas, migrations, CRUD flows, transactions, query troubleshooting, and data integrity.',
   },
 ];
 
