@@ -10,182 +10,166 @@ export interface Project {
   challenges: string[];
   lessons: string[];
   stack: string[];
-  status: 'live' | 'api' | 'archived';
+  status: 'live' | 'api' | 'archived' | 'development';
   repoUrl: string;
+  additionalRepoUrls?: string[];
   liveUrl?: string;
   highlights: string[];
 }
 
-export const featuredProjectId = 'flexileave';
+export const featuredProjectId = 'flowforge';
 
 export const projects: Project[] = [
   {
-    id: 'streetluxcity-shop',
-    name: 'StreetLuxCity',
-    path: '/projects/streetluxcity-shop',
-    description: 'E-commerce storefront with native mobile packaging',
+    id: 'flowforge',
+    name: 'FlowForge',
+    path: '/projects/flowforge',
+    description:
+      'Workflow automation platform with background workers, integrations and versioned workflows.',
     longDescription:
-      'A full e-commerce storefront built on Next.js, wired to a Spring Boot REST API and packaged with Capacitor so the same codebase ships as a native mobile app alongside the web build.',
+      'FlowForge is a full-stack integration and workflow automation project. Its NestJS backend supports authenticated workspaces, versioned workflows, asynchronous execution, webhooks and third-party integrations. The React frontend is under active development and is being aligned with the backend API.',
     problem:
-      'The storefront needed to present products cleanly across web and mobile without splitting the customer experience into separate codebases.',
+      'Connecting services and automating multi-step business processes requires reliable execution, secure credentials, clear workflow definitions and visibility into failures.',
     solution:
-      'Built a responsive Next.js storefront and packaged it with Capacitor so the product experience could move between browser and native shells.',
-    architecture: ['Next.js storefront', 'Spring Boot REST API', 'Relational data layer', 'Capacitor mobile shell'],
-    challenges: ['Keeping the responsive storefront usable across small screens', 'Aligning frontend product flows with backend API contracts'],
-    lessons: ['Shared codebases work best when UI states and API contracts stay explicit', 'Mobile packaging decisions affect web architecture early'],
-    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Capacitor'],
-    status: 'live',
-    repoUrl: 'https://github.com/jackson951/streetluxcity-shop',
-    highlights: [
-      'Single codebase compiled to web and native mobile via Capacitor',
-      'Connects to a dedicated Spring Boot backend over REST',
-      'Responsive storefront UI built with Tailwind CSS',
+      'Designed a backend architecture that separates API requests from background workflow execution, with queue-based processing, workspace access controls, execution history and integration boundaries.',
+    architecture: [
+      'React and TypeScript frontend with React Flow',
+      'NestJS REST API with authenticated workspaces',
+      'PostgreSQL persistence through Prisma',
+      'Redis and BullMQ for queued workflow execution',
+      'Separate background worker and execution engine',
+      'Webhooks and third-party integration modules',
+      'Docker-based development infrastructure',
     ],
-  },
-  {
-    id: 'api-streetluxcity',
-    name: 'StreetLuxCity API',
-    path: '/projects/api-streetluxcity',
-    description: 'Spring Boot REST API powering the storefront',
-    longDescription:
-      'The backend service for StreetLuxCity — a Spring Boot REST API handling catalog, orders, and the data layer behind the storefront.',
-    problem:
-      'The storefront required a predictable API layer for product and order data instead of coupling business rules directly into the UI.',
-    solution:
-      'Designed a Spring Boot REST service with clear endpoints and a relational persistence layer for the e-commerce workflow.',
-    architecture: ['Spring Boot controllers', 'Service layer', 'Repository/data layer', 'Storefront REST clients'],
-    challenges: ['Designing routes that stay stable as storefront needs evolve', 'Keeping persistence concerns separated from request handling'],
-    lessons: ['A clear API boundary makes frontend changes safer', 'Backend structure matters even in small commerce systems'],
-    stack: ['Java', 'Spring Boot', 'REST', 'SQL'],
-    status: 'api',
-    repoUrl: 'https://github.com/jackson951/api.streetluxcity',
+    challenges: [
+      'Coordinating asynchronous workflow execution and tracking run states',
+      'Designing safe retry and idempotency behaviour',
+      'Protecting workspace data and integration credentials',
+      'Keeping the frontend aligned with evolving backend contracts',
+    ],
+    lessons: [
+      'Reliable automation needs explicit execution states and failure handling',
+      'Background processing should be separated from request handling',
+      'Security and observability need to be part of the architecture from the beginning',
+    ],
+    stack: [
+      'TypeScript',
+      'NestJS',
+      'React',
+      'PostgreSQL',
+      'Prisma',
+      'Redis',
+      'BullMQ',
+      'Docker',
+    ],
+    status: 'development',
+    repoUrl: 'https://github.com/jackson951/forge-flow-api',
+    additionalRepoUrls: [
+      'https://github.com/jackson951/flow-forge-web',
+    ],
     highlights: [
-      'REST API design serving the StreetLuxCity storefront',
-      'Built on Spring Boot with a relational data layer',
+      'Versioned workflows with queue-based execution and background workers',
+      'Workspace authentication, access control and credential protection',
+      'Webhook and external service integrations',
+      'Unit, integration and end-to-end testing documented in the backend',
+      'React frontend under active development',
     ],
   },
   {
     id: 'flexileave',
     name: 'FlexiLeave',
     path: '/projects/flexileave-app',
-    description: 'Full-stack leave management system',
+    description:
+      'Full-stack employee leave management and approval system.',
     longDescription:
-      'A full-stack web application for managing employee leave requests, with secure JWT authentication, role-based access control, and a modern responsive interface.',
+      'A full-stack leave management application for employees and administrators. It brings leave requests, balances, approval decisions and reporting into a single system, with authenticated access and role-specific functionality.',
     problem:
-      'Leave requests become hard to manage when balances, approvals, roles, and request history live in disconnected manual processes.',
+      'Manual leave processes make it difficult to track balances, request history, approvals and team availability consistently.',
     solution:
-      'Built a role-aware leave platform with authenticated request submission, approval workflows, PostgreSQL-backed records, and a responsive React interface.',
-    architecture: ['React request UI', 'Node.js / Express API', 'PostgreSQL schema', 'JWT authentication', 'Role-based access control'],
-    challenges: ['Modeling leave status changes cleanly', 'Protecting user and approver actions with role-aware API checks'],
-    lessons: ['Workflow products need state design before screen design', 'Authentication details shape both frontend routes and backend contracts'],
-    stack: ['React', 'Node.js', 'PostgreSQL', 'JWT'],
+      'Built a role-aware application where employees can submit and track leave requests while administrators manage approvals, users and reporting.',
+    architecture: [
+      'React frontend with responsive application screens',
+      'Node.js and Express REST API',
+      'PostgreSQL database accessed through Prisma',
+      'JWT authentication and role-based authorization',
+      'Employee and administrator workflows',
+    ],
+    challenges: [
+      'Representing leave requests and approval states consistently',
+      'Enforcing role permissions across frontend and backend',
+      'Keeping leave balances and request history understandable',
+    ],
+    lessons: [
+      'Business workflows benefit from clear state transitions',
+      'Authorization must be enforced by the backend, not only the UI',
+      'Database design influences how easily reporting features can grow',
+    ],
+    stack: [
+      'React',
+      'Node.js',
+      'Express',
+      'PostgreSQL',
+      'Prisma',
+      'JWT',
+      'Tailwind CSS',
+    ],
     status: 'live',
     repoUrl: 'https://github.com/jackson951/flexileave-app',
     highlights: [
-      'JWT-based authentication with role-based access control',
-      'PostgreSQL data layer with a Node.js/Express API',
-      'Responsive React frontend for request submission and approval',
+      'Employee leave requests, balances and request history',
+      'Administrator approval and user management workflows',
+      'JWT authentication and role-based access control',
+      'Reporting dashboards and responsive application interface',
     ],
   },
   {
     id: 'stackmap',
     name: 'StackMap',
     path: '/projects/stackmap',
-    description: 'AI-powered codebase intelligence platform',
+    description:
+      'AI-assisted GitHub repository exploration and codebase intelligence.',
     longDescription:
-      'A platform that connects to GitHub repositories and lets developers ask natural-language questions about a codebase. StackMap uses AI to analyse code structure and dependencies to speed up onboarding.',
+      'StackMap is a developer-focused platform for exploring GitHub repositories through natural-language questions, codebase analysis and generated documentation. Its frontend uses Next.js and TypeScript, with Supabase supporting authentication and persistence.',
     problem:
-      'Developers joining unfamiliar repositories lose time understanding structure, dependencies, and where important logic lives.',
+      'Understanding an unfamiliar codebase can require hours of navigating files, tracing dependencies and reconstructing architectural decisions.',
     solution:
-      'Built a GitHub-connected platform for natural-language codebase exploration backed by analysis of repository structure and dependencies.',
-    architecture: ['TypeScript client', 'Node.js service', 'GitHub repository ingestion', 'AI question-answering flow'],
-    challenges: ['Turning repository structure into useful context', 'Designing a useful Q&A flow without overwhelming the user'],
-    lessons: ['AI features need strong information architecture', 'Developer tools should expose confidence and context, not just answers'],
-    stack: ['TypeScript', 'Node.js', 'AI Integration'],
-    status: 'live',
+      'Created a repository exploration interface that brings code structure, AI-assisted questions and developer onboarding information into one experience.',
+    architecture: [
+      'Next.js and TypeScript application',
+      'Supabase authentication and PostgreSQL persistence',
+      'GitHub repository integration',
+      'AI-assisted codebase question-answering',
+      'Separate StackMap server repository',
+    ],
+    challenges: [
+      'Presenting large amounts of repository information clearly',
+      'Providing useful context for natural-language code questions',
+      'Connecting repository exploration with authentication and user data',
+    ],
+    lessons: [
+      'AI-assisted answers are more useful when linked to source context',
+      'Developer tools need clear navigation and understandable outputs',
+      'Repository analysis requires careful separation of ingestion and presentation',
+    ],
+    stack: [
+      'Next.js',
+      'TypeScript',
+      'React',
+      'Tailwind CSS',
+      'Supabase',
+      'PostgreSQL',
+      'AI Integration',
+    ],
+    status: 'development',
     repoUrl: 'https://github.com/jackson951/stackmap',
+    additionalRepoUrls: [
+      'https://github.com/jackson951/Stackmap-Server',
+    ],
     highlights: [
-      'Natural-language Q&A over connected GitHub repositories',
-      'Analyses code structure and dependency graphs',
-      'Paired client (stackmap) and server (Stackmap-Server) architecture',
+      'Natural-language exploration of GitHub repositories',
+      'Code structure and dependency analysis',
+      'GitHub authentication and repository integration',
+      'Architecture documentation and onboarding features described in the project',
     ],
   },
 ];
-
-export const stackGroups: { label: string; items: string[] }[] = [
-  { label: 'languages', items: ['C#', 'TypeScript', 'JavaScript', 'SQL'] },
-  { label: 'frontend', items: ['React.js', 'Next.js', 'Tailwind CSS'] },
-  { label: 'backend', items: ['ASP.NET Core', 'Express.js', 'Spring Boot'] },
-  { label: 'databases', items: ['SQL Server', 'PostgreSQL', 'MongoDB'] },
-  { label: 'cloud & deployment', items: ['Microsoft Azure', 'IIS', 'Docker', 'GitHub Actions'] },
-  { label: 'microsoft ecosystem', items: ['MS Entra ID', 'SharePoint'] },
-  { label: 'practices', items: ['REST APIs', 'Agile / Scrum', 'CI/CD', 'Code Review'] },
-];
-
-export const profile = {
-  name: 'Jackson Khuto',
-  role: 'Full-Stack Software Developer',
-  location: 'Midrand, Gauteng, South Africa',
-  email: 'jacksonkhuto591@gmail.com',
-  phone: '066 180 2747',
-  github: 'https://github.com/jackson951',
-  linkedin: 'https://www.linkedin.com/in/jackson-khuto-03533437b/',
-  summary:
-    'I approach software by first understanding the business process, the users involved, and the data that needs to move through the system. From there, I design maintainable features with clear separation between the interface, API, business logic, and database layers. I care about secure authentication, role-based access, reliable workflows, useful reporting, and interfaces that are simple for people to use. My goal is to build systems that solve the real problem, are easy to support, and can grow without becoming fragile.',
-};
-
-export interface ExperienceEntry {
-  role: string;
-  company: string;
-  location: string;
-  period: string;
-  current?: boolean;
-}
-
-export const experienceImpactGroups = [
-  {
-    title: 'Enterprise Application Development',
-    points: [
-      'Build and enhance internal applications across requirements, feature design, implementation, testing, UAT, deployment, support, and maintenance.',
-      'Develop React and TypeScript interfaces for dashboards, forms, filters, request workflows, validation states, and responsive business screens.',
-      'Implement backend functionality with Node.js, Express, REST APIs, service layers, scheduled jobs, validation, error handling, and database access patterns.',
-    ],
-  },
-  {
-    title: 'Identity & Security',
-    points: [
-      'Secure applications with Microsoft Entra ID, MSAL, JWT authentication, protected routes, and role-based access control.',
-      'Work with Azure App Registrations, enterprise identity configuration, token handling, and Microsoft Graph integrations.',
-    ],
-  },
-  {
-    title: 'Business Processes & Reporting',
-    points: [
-      'Deliver approval workflows, request management, dashboards, Excel reporting, audit logs, and SAP-related process support.',
-      'Translate business requirements into usable application flows with clearer navigation, cleaner layouts, and user-focused improvements.',
-    ],
-  },
-  {
-    title: 'Delivery & Support',
-    points: [
-      'Support IIS and Azure deployments, PM2 process management, environment configuration, build troubleshooting, and release fixes.',
-      'Contribute to UAT support, bug fixing, technical documentation, change management, CAB processes, and production enhancements.',
-    ],
-  },
-];
-
-export const experience: ExperienceEntry[] = [
-  {
-    role: 'Software Developer',
-    company: 'Barloworld Equipment',
-    location: 'Isando, Gauteng',
-    period: 'Dec 2025 — Present',
-    current: true,
-  },
-];
-
-export const education = {
-  degree: 'BSc Information Technology',
-  school: 'North-West University, Vanderbijlpark',
-  period: 'Feb 2022 – Dec 2024',
-};
