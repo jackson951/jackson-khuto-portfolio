@@ -4,6 +4,7 @@ import {
   BriefcaseBusiness,
   CheckCircle2,
   Layers3,
+  Code2,
   Mail,
   MapPin,
   ShieldCheck,
@@ -74,9 +75,9 @@ const routeMeta: Record<RouteKey, { title: string; description: string }> = {
 
 const stats = [
   { label: 'Current role', value: 'Software Developer' },
-  { label: 'Featured projects', value: String(projects.length) },
-  { label: 'Core technologies', value: '20+' },
-  { label: 'Location', value: 'Midrand, ZA' },
+  { label: 'Selected projects', value: String(projects.length).padStart(2, '0') },
+  { label: 'Focus', value: 'Full-stack systems' },
+  { label: 'Based in', value: 'Gauteng, ZA' },
 ];
 
 const resolveRoute = (path: string): RouteState => {
@@ -205,40 +206,59 @@ const ButtonLink = ({ children, path, onNavigate, variant = 'primary' }: { child
 );
 
 const HomePage = ({ onNavigate }: { onNavigate: (path: string) => void }) => (
-  <section className="border-b border-line bg-grid bg-grid">
-    <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-      <div>
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-copper">Full-stack software developer</p>
-        <h1 className="mt-5 max-w-3xl text-5xl font-semibold leading-none text-paper md:text-7xl">{profile.name}</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
-          I build enterprise web applications, secure APIs, workflow tools, and reporting interfaces that support real business operations.
+  <section className="relative isolate overflow-hidden border-b border-line bg-grid">
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_25%,rgba(201,128,61,0.07),transparent_48%)]" />
+    <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-14 lg:py-24">
+      <div className="max-w-2xl">
+        <div className="inline-flex items-center gap-2 rounded-full border border-copper/30 bg-copper/5 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-copper">
+          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-copper" />
+          Full-stack software developer
+        </div>
+        <h1 className="mt-6 text-[clamp(3.1rem,6vw,5.5rem)] font-semibold leading-[1.02] tracking-tight text-paper">
+          Jackson <span className="text-copper">Khuto.</span>
+        </h1>
+        <p className="mt-6 max-w-xl text-lg leading-8 text-muted sm:text-xl sm:leading-9">
+          I turn complex business processes into secure, reliable software — from React interfaces and backend APIs to workflow automation and reporting tools.
         </p>
-        <div className="mt-6 flex flex-wrap gap-4 font-mono text-xs text-slate">
-          <span className="inline-flex items-center gap-2"><BriefcaseBusiness size={15} />{profile.role}</span>
-          <span className="inline-flex items-center gap-2"><MapPin size={15} />{profile.location}</span>
+        <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs text-slate">
+          <span className="inline-flex items-center gap-2"><BriefcaseBusiness size={15} className="text-copper" />{profile.role}</span>
+          <span className="inline-flex items-center gap-2"><MapPin size={15} className="text-copper" />{profile.location}</span>
         </div>
         <div className="mt-9 flex flex-wrap gap-3">
-          <ButtonLink path="/projects" onNavigate={onNavigate}>View projects <ArrowRight size={16} /></ButtonLink>
-          <ButtonLink path="/contact" onNavigate={onNavigate} variant="secondary">Contact me <Mail size={16} /></ButtonLink>
+          <ButtonLink path="/projects" onNavigate={onNavigate}>Explore my work <ArrowRight size={16} /></ButtonLink>
+          <ButtonLink path="/contact" onNavigate={onNavigate} variant="secondary">Get in touch <Mail size={16} /></ButtonLink>
+        </div>
+        <div className="mt-9 flex flex-wrap items-center gap-3 border-t border-line pt-6">
+          <span className="mr-1 font-mono text-[11px] uppercase tracking-widest text-slate">Building with</span>
+          {['React', 'TypeScript', 'Node.js', 'PostgreSQL'].map((tech) => (
+            <span key={tech} className="rounded-md border border-line bg-panel/70 px-2.5 py-1.5 font-mono text-xs text-muted">{tech}</span>
+          ))}
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-line bg-panel shadow-2xl shadow-black/20">
-        <div className="grid min-h-[22rem] place-items-center bg-[radial-gradient(circle_at_30%_20%,rgba(201,128,61,0.24),transparent_34%),linear-gradient(135deg,#11151A,#0B0E11_62%,#141B23)] p-8">
-          <img
-             src="/profile.png"
-             alt="Jackson Khuto"
-             className="h-64 w-64 rounded-full border-4 border-copper/40 object-cover object-center shadow-2xl shadow-black/30"
-             width={256}
-             height={256}
-             fetchPriority="high"
-          />
+      <div className="overflow-hidden rounded-xl border border-line bg-panel shadow-2xl shadow-black/30">
+        <div className="relative grid min-h-[21rem] place-items-center overflow-hidden bg-[radial-gradient(circle_at_50%_35%,rgba(201,128,61,0.18),transparent_55%),linear-gradient(145deg,#161A20,#0B0E11_72%,#161D25)] px-6 py-10 sm:min-h-[25rem]">
+          <div aria-hidden="true" className="absolute inset-5 rounded-lg border border-white/5" />
+          <div className="relative rounded-full bg-copper/10 p-2 shadow-[0_0_65px_rgba(201,128,61,0.09)]">
+            <img
+              src="/profile.png"
+              alt="Portrait of Jackson Khuto"
+              className="h-64 w-64 rounded-full border-[3px] border-copper/60 object-cover object-center shadow-2xl shadow-black/40 sm:h-72 sm:w-72"
+              width={288}
+              height={288}
+              fetchPriority="high"
+            />
+          </div>
+          <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3 rounded-md border border-white/10 bg-ink/80 px-4 py-3 backdrop-blur-sm">
+            <span className="font-mono text-xs text-paper">Design. Build. Deliver.</span>
+            <Code2 size={17} className="shrink-0 text-copper" aria-hidden="true" />
+          </div>
         </div>
-        <div className="grid grid-cols-2 border-t border-line">
-          {stats.map((stat) => (
-            <div key={stat.label} className="border-r border-t border-line p-5 first:border-t-0 odd:border-l-0 even:border-r-0">
-              <p className="font-mono text-2xs uppercase text-slate">{stat.label}</p>
-              <p className="mt-2 text-lg font-semibold text-paper">{stat.value}</p>
+        <div className="grid grid-cols-2">
+          {stats.map((stat, index) => (
+            <div key={stat.label} className={`min-w-0 border-line p-4 sm:p-5 ${index % 2 === 0 ? 'border-r' : ''} ${index > 1 ? 'border-t' : ''}`}>
+              <p className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate">{stat.label}</p>
+              <p className="mt-2 text-base font-semibold text-paper sm:text-lg">{stat.value}</p>
             </div>
           ))}
         </div>
@@ -251,8 +271,8 @@ const AboutPage = () => (
   <PageShell eyebrow="/about" title="Clear systems thinking, practical delivery." intro="I approach software by understanding the process, the people using it, and the data moving through it before designing the interface and API contract.">
     <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
       <aside className="rounded-lg border border-line bg-panel p-6">
-        <div className="aspect-square rounded-lg border border-line bg-[linear-gradient(135deg,#1E2228,#0B0E11)] p-6">
-          <div className="flex h-full items-center justify-center rounded-md border border-copper/30 font-mono text-6xl font-semibold text-copper">JK</div>
+        <div className="aspect-square overflow-hidden rounded-lg border border-line bg-[linear-gradient(135deg,#1E2228,#0B0E11)]">
+          <img src="/profile.png" alt="Jackson Khuto" loading="lazy" className="h-full w-full object-cover object-center" />
         </div>
         <div className="mt-6 space-y-3 font-mono text-sm text-muted">
           <p>{education.degree}</p>
@@ -443,7 +463,7 @@ const ContactPage = () => {
             <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-copper"><LinkedinIcon size={16} />LinkedIn profile</a>
             <span className="flex items-center gap-3"><MapPin size={16} />{profile.location}</span>
           </div>
-          <p className="mt-6 border-t border-line pt-6 text-sm leading-7 text-muted">I usually reply within a day when the message includes role context, project scope, or the problem you want solved.</p>
+          <p className="mt-6 border-t border-line pt-6 text-sm leading-7 text-muted">For opportunities or collaborations, share a little context about the role, project, or problem you want to solve.</p>
         </aside>
         <form onSubmit={handleSubmit} className="grid gap-4 rounded-lg border border-line bg-panel p-6">
           <div className="grid gap-4 sm:grid-cols-2">
