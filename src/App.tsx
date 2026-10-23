@@ -225,7 +225,14 @@ const HomePage = ({ onNavigate }: { onNavigate: (path: string) => void }) => (
 
       <div className="overflow-hidden rounded-lg border border-line bg-panel shadow-2xl shadow-black/20">
         <div className="grid min-h-[22rem] place-items-center bg-[radial-gradient(circle_at_30%_20%,rgba(201,128,61,0.24),transparent_34%),linear-gradient(135deg,#11151A,#0B0E11_62%,#141B23)] p-8">
-          <div className="flex h-40 w-40 items-center justify-center rounded-full border border-copper/40 bg-ink/70 text-5xl font-semibold text-paper shadow-2xl shadow-black/30">JK</div>
+          <img
+             src="/profile.png"
+             alt="Jackson Khuto"
+             className="h-64 w-64 rounded-full border-4 border-copper/40 object-cover object-center shadow-2xl shadow-black/30"
+             width={256}
+             height={256}
+             fetchPriority="high"
+          />
         </div>
         <div className="grid grid-cols-2 border-t border-line">
           {stats.map((stat) => (
