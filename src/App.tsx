@@ -44,7 +44,7 @@ const navItems = [
 const routeMeta: Record<RouteKey, { title: string; description: string }> = {
   home: {
     title: 'Jackson Khuto - Full-Stack Software Developer',
-    description: 'Senior-style portfolio for Jackson Khuto, a full-stack developer building React, Node.js, Spring Boot, SQL, and Azure-enabled business systems.',
+    description: 'Portfolio of Jackson Khuto, a full-stack software developer building secure APIs, enterprise applications, workflow automation systems, and React-based interfaces.',
   },
   about: {
     title: 'About - Jackson Khuto',
@@ -74,7 +74,7 @@ const routeMeta: Record<RouteKey, { title: string; description: string }> = {
 
 const stats = [
   { label: 'Current role', value: 'Software Developer' },
-  { label: 'Projects', value: `${projects.length}+` },
+  { label: 'Featured projects', value: String(projects.length) },
   { label: 'Core technologies', value: '20+' },
   { label: 'Location', value: 'Midrand, ZA' },
 ];
@@ -330,7 +330,7 @@ const ProjectCard = ({ project, featured, onNavigate }: { project: Project; feat
     </div>
     <div className="flex flex-1 flex-col p-6">
       <div className="flex items-center justify-between gap-3">
-        <p className="font-mono text-xs uppercase text-copper">{featured ? 'Featured' : project.status}</p>
+        <p className="font-mono text-xs uppercase text-copper">{featured ? `Featured · ${project.status}` : project.status}</p>
         <span className="rounded-full border border-line px-2 py-0.5 font-mono text-2xs text-slate">{project.stack[0]}</span>
       </div>
       <h2 className="mt-4 text-2xl font-semibold text-paper">{project.name}</h2>
@@ -376,6 +376,11 @@ const ProjectPage = ({ project, onNavigate }: { project: Project; onNavigate: (p
           <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-copper px-4 py-2.5 font-mono text-sm font-medium text-ink hover:bg-copper-bright">
             <GithubIcon size={16} /> Repository
           </a>
+          {project.additionalRepoUrls?.map((url, index) => (
+            <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md border border-line px-4 py-2.5 font-mono text-sm text-paper hover:border-copper hover:text-copper">
+              <GithubIcon size={16} />{project.id === 'flowforge' ? 'Frontend repository' : `Additional repository ${index + 1}`}
+            </a>
+          ))}
           <ButtonLink path="/projects" onNavigate={onNavigate} variant="secondary">All projects</ButtonLink>
         </div>
       </aside>
