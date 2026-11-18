@@ -15,6 +15,8 @@ export interface Project {
   additionalRepoUrls?: string[];
   liveUrl?: string;
   highlights: string[];
+  /** Request flow, left to right. Each stage is a column of nodes in the architecture diagram. */
+  flow: { label: string; nodes: string[] }[];
 }
 
 export const featuredProjectId = 'flowforge';
@@ -52,6 +54,13 @@ export const projects: Project[] = [
     status: 'development',
     repoUrl: 'https://github.com/jackson951/forge-flow-api',
     additionalRepoUrls: ['https://github.com/jackson951/flow-forge-web'],
+    flow: [
+      { label: 'client', nodes: ['React Flow editor'] },
+      { label: 'api', nodes: ['NestJS REST', 'Workspace auth'] },
+      { label: 'queue', nodes: ['Redis', 'BullMQ'] },
+      { label: 'worker', nodes: ['Execution engine', 'Webhooks'] },
+      { label: 'data', nodes: ['PostgreSQL', 'Prisma'] },
+    ],
     highlights: [
       'Versioned workflows with queue-based execution and background workers',
       'Workspace access control and credential protection',
@@ -88,6 +97,12 @@ export const projects: Project[] = [
     stack: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Prisma', 'JWT', 'Tailwind CSS'],
     status: 'live',
     repoUrl: 'https://github.com/jackson951/flexileave-app',
+    flow: [
+      { label: 'client', nodes: ['React SPA'] },
+      { label: 'api', nodes: ['Express REST', 'JWT + RBAC'] },
+      { label: 'domain', nodes: ['Approvals', 'Balances'] },
+      { label: 'data', nodes: ['Prisma', 'PostgreSQL'] },
+    ],
     highlights: [
       'Employee leave requests, balances and history',
       'Administrator approval and user management workflows',
@@ -124,6 +139,12 @@ export const projects: Project[] = [
     status: 'development',
     repoUrl: 'https://github.com/jackson951/stackmap',
     additionalRepoUrls: ['https://github.com/jackson951/Stackmap-Server'],
+    flow: [
+      { label: 'client', nodes: ['Next.js app'] },
+      { label: 'auth', nodes: ['Supabase Auth'] },
+      { label: 'server', nodes: ['Repo ingestion', 'AI Q&A'] },
+      { label: 'sources', nodes: ['GitHub API', 'PostgreSQL'] },
+    ],
     highlights: [
       'Natural-language GitHub repository exploration',
       'Code structure and dependency analysis',

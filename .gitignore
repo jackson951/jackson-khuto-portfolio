@@ -25,3 +25,6 @@ dist-ssr
 
 .env
 .env.*
+
+# Local screenshot tooling (browser profile contains cookies/saved logins)
+responsive-test/edge-profile/
