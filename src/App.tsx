@@ -10,7 +10,12 @@ import {
   CheckCircle2,
   Command,
   Copy,
+  ClipboardList,
+  Download,
+  Eye,
+  FileSpreadsheet,
   GraduationCap,
+  Inbox,
   LayoutDashboard,
   Mail,
   MapPin,
@@ -31,30 +36,27 @@ import { NavigateContext } from './components/navigation';
 import { Reveal } from './components/Reveal';
 import { ArchitectureFlow } from './components/ArchitectureFlow';
 import { CommandPalette } from './components/CommandPalette';
+import { CaseStudy } from './components/CaseStudy';
+import { caseStudies } from './data/caseStudies';
 import {
+  CV_PATH,
   audiences,
+  bookChatHref,
   contactTopics,
   education,
   experience,
   experienceImpactGroups,
-  featuredProjectId,
+  homeAbout,
+  problems,
   profile,
   processSteps,
   projects,
   services,
   stackGroups,
   type Project,
-  type Service,
   type ServiceIcon,
 } from './data/portfolio';
-
-type RouteKey = 'home' | 'services' | 'about' | 'experience' | 'projects' | 'project' | 'skills' | 'contact' | 'notfound';
-
-interface RouteState {
-  key: RouteKey;
-  path: string;
-  project?: Project;
-}
+import { metaFor, resolveRoute, type RouteState } from './seo';
 
 const navItems = [
   { label: 'Home', path: '/' },
@@ -65,45 +67,6 @@ const navItems = [
   { label: 'About', path: '/about' },
   { label: 'Contact', path: '/contact' },
 ];
-
-const routeMeta: Record<RouteKey, { title: string; description: string }> = {
-  home: {
-    title: 'Jackson Khuto — Software that takes the busywork off your team',
-    description: 'Jackson Khuto is a full-stack developer who builds internal tools, approval workflows, secure sign-in, APIs and dashboards that replace spreadsheets, email chains and manual steps.',
-  },
-  services: {
-    title: 'Services — Jackson Khuto',
-    description: 'Internal business tools, workflow automation, secure sign-in, APIs and integrations, dashboards and reporting, deployment and support.',
-  },
-  about: {
-    title: 'About — Jackson Khuto',
-    description: 'Professional summary, values, education, and current focus for Jackson Khuto.',
-  },
-  experience: {
-    title: 'Experience — Jackson Khuto',
-    description: 'Enterprise application development, identity, reporting, support, and delivery experience.',
-  },
-  projects: {
-    title: 'Projects — Jackson Khuto',
-    description: 'Selected full-stack projects, architecture notes, repositories, and lessons learned.',
-  },
-  project: {
-    title: 'Project — Jackson Khuto',
-    description: 'Detailed case study for a selected Jackson Khuto software project.',
-  },
-  skills: {
-    title: 'Skills — Jackson Khuto',
-    description: 'Frontend, backend, database, cloud, DevOps, Microsoft ecosystem, and delivery skills.',
-  },
-  contact: {
-    title: 'Contact — Jackson Khuto',
-    description: 'Tell Jackson Khuto what you need built: an internal tool, a workflow, an integration, a dashboard, or a full-stack role.',
-  },
-  notfound: {
-    title: 'Page not found — Jackson Khuto',
-    description: 'This page does not exist.',
-  },
-};
 
 const statusLabel: Record<Project['status'], string> = {
   live: 'Live',
@@ -131,28 +94,11 @@ const principles = [
   },
 ];
 
-const resolveRoute = (path: string): RouteState => {
-  const pathname = path.split(/[?#]/)[0] || '/';
-  const normalized = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
-  const project = projects.find((item) => item.path === normalized);
-
-  if (project) return { key: 'project', path: normalized, project };
-  if (normalized === '/' || normalized === '') return { key: 'home', path: '/' };
-  const simple: Record<string, RouteKey> = {
-    '/services': 'services',
-    '/about': 'about',
-    '/experience': 'experience',
-    '/projects': 'projects',
-    '/skills': 'skills',
-    '/contact': 'contact',
-  };
-  if (simple[normalized]) return { key: simple[normalized], path: normalized };
-  return { key: 'notfound', path: normalized };
-};
-
-function App() {
-  const [route, setRoute] = useState<RouteState>(() => resolveRoute(window.location.pathname));
+function App({ initialPath }: { initialPath: string }) {
+  const [route, setRoute] = useState<RouteState>(() => resolveRoute(initialPath));
   const [paletteOpen, setPaletteOpen] = useState(false);
+  // Only animate page changes made inside the app; on first load the prerendered page shows immediately.
+  const [navigated, setNavigated] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
 
@@ -164,6 +110,7 @@ function App() {
       window.history.pushState({}, '', target);
     }
     window.scrollTo({ top: 0, behavior: 'instant' });
+    setNavigated(true);
     setRoute(next);
   }, []);
 
@@ -186,19 +133,17 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const meta = route.project
-      ? { title: `${route.project.name} case study — Jackson Khuto`, description: route.project.longDescription }
-      : routeMeta[route.key];
+    const meta = metaFor(route.key, route.path);
 
     document.title = meta.title;
     setMeta('description', meta.description);
     setMeta('og:title', meta.title, 'property');
     setMeta('og:description', meta.description, 'property');
-    setMeta('og:url', `${window.location.origin}${route.path}`, 'property');
+    setMeta('og:url', meta.url, 'property');
     setMeta('twitter:title', meta.title);
     setMeta('twitter:description', meta.description);
-    setMeta('robots', route.key === 'notfound' ? 'noindex' : 'index, follow');
-    setCanonical(`${window.location.origin}${route.path}`);
+    setMeta('robots', meta.noindex ? 'noindex' : 'index, follow');
+    setCanonical(meta.url);
 
     // Move focus to the new page for keyboard and screen-reader users (not on first load).
     if (firstRender.current) {
@@ -223,7 +168,7 @@ function App() {
       page = <ProjectsPage />;
       break;
     case 'project':
-      page = route.project ? <ProjectPage project={route.project} /> : <NotFoundPage />;
+      page = route.project ? <ProjectPage project={route.project} /> : <NotFoundPage path={route.path} />;
       break;
     case 'skills':
       page = <SkillsPage />;
@@ -232,7 +177,7 @@ function App() {
       page = <ContactPage />;
       break;
     case 'notfound':
-      page = <NotFoundPage />;
+      page = <NotFoundPage path={route.path} />;
       break;
     default:
       page = <HomePage />;
@@ -242,7 +187,7 @@ function App() {
     <NavigateContext.Provider value={navigate}>
       <div className="min-h-screen bg-ink text-paper">
         <Header currentPath={route.path} navItems={navItems} onOpenPalette={() => setPaletteOpen(true)} />
-        <main id="main" ref={mainRef} tabIndex={-1} key={route.path} className="animate-rise focus:outline-none">
+        <main id="main" ref={mainRef} tabIndex={-1} key={route.path} className={`focus:outline-none ${navigated ? 'animate-rise' : ''}`}>
           {page}
         </main>
         <Footer />
@@ -377,134 +322,195 @@ const audienceIcons: Record<(typeof audiences)[number]['id'], LucideIcon> = {
 
 const contactLink = (topic: string) => `/contact?topic=${encodeURIComponent(topic)}`;
 
-const HomePage = () => {
-  const featured = projects.find((project) => project.id === featuredProjectId) ?? projects[0];
-  const others = projects.filter((project) => project.id !== featured.id);
-  return (
-    <>
-      <Hero />
-
-      {/* 01 — What I can build for you */}
-      <section className="border-b border-line">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-          <Reveal>
-            <SectionHeading
-              index="01"
-              label="What I can build for you"
-              title="Sound familiar? I can fix that."
-              action={
-                <Link to="/services" className="inline-flex items-center gap-2 font-mono text-sm text-muted transition hover:text-copper">
-                  How each one works <ArrowRight size={15} />
-                </Link>
-              }
-            />
-          </Reveal>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, index) => (
-              <Reveal key={service.id} delay={(index % 3) * 90} className="h-full">
-                <ServiceCard service={service} />
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 02 — Proof */}
-      <section className="border-b border-line bg-panel/30">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-          <Reveal>
-            <SectionHeading
-              index="02"
-              label="Proof"
-              title="Don't take my word for it. Here's the work."
-              action={
-                <Link to="/projects" className="inline-flex items-center gap-2 font-mono text-sm text-muted transition hover:text-copper">
-                  All projects <ArrowRight size={15} />
-                </Link>
-              }
-            />
-          </Reveal>
-          <div className="mt-12 grid gap-6">
-            <Reveal>
-              <FeaturedProject project={featured} />
-            </Reveal>
-            <div className="grid gap-6 md:grid-cols-2">
-              {others.map((project, index) => (
-                <Reveal key={project.id} delay={index * 120}>
-                  <ProjectCard project={project} />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 03 — How we'd work together */}
-      <section className="border-b border-line">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-          <Reveal>
-            <SectionHeading index="03" label="Working together" title="From first chat to launch, step by step." />
-          </Reveal>
-          <ProcessSteps />
-        </div>
-      </section>
-
-      {/* 04 — Track record */}
-      <section className="border-b border-line bg-panel/30">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:py-28 lg:grid-cols-[0.9fr_1.1fr]">
-          <Reveal>
-            <SectionHeading index="04" label="Track record" title="I already do this every day." />
-            <p className="mt-6 max-w-md text-base leading-8 text-muted">
-              As a full-stack developer I build and support internal business applications in an enterprise environment: React interfaces, Node.js services, Microsoft Entra ID security, approval workflows, reporting, and the deployments that keep them running.
-            </p>
-            <div className="mt-8">
-              <ButtonLink path="/experience" variant="secondary">
-                Full experience <ArrowRight size={16} />
-              </ButtonLink>
-            </div>
-          </Reveal>
-          <Reveal delay={120}>
-            <Timeline />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* 05 — Toolbox */}
-      <section className="border-b border-line">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-          <Reveal>
-            <SectionHeading
-              index="05"
-              label="Toolbox"
-              title="Proven tools, chosen to fit your setup."
-              action={
-                <Link to="/skills" className="inline-flex items-center gap-2 font-mono text-sm text-muted transition hover:text-copper">
-                  All skills <ArrowRight size={15} />
-                </Link>
-              }
-            />
-          </Reveal>
-          <div className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-            {stackGroups.slice(0, 6).map((group, index) => (
-              <Reveal key={group.label} delay={index * 60}>
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-slate">{group.label}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <span key={item} className="rounded-md border border-line bg-ink px-2.5 py-1.5 font-mono text-xs text-paper transition-colors hover:border-copper/60">
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <AudienceCta index="06" />
-    </>
-  );
+const problemIcons: Record<(typeof problems)[number]['icon'], LucideIcon> = {
+  approvals: Inbox,
+  spreadsheets: FileSpreadsheet,
+  field: ClipboardList,
+  visibility: Eye,
 };
+
+const HomePage = () => (
+  <>
+    <Hero />
+
+    {/* 01 — Problems I solve */}
+    <section id="problems" className="scroll-mt-20 border-b border-line">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <Reveal>
+          <SectionHeading index="01" label="Problems I solve" title="Where the busywork usually hides." />
+        </Reveal>
+        <div className="mt-12 grid gap-4 md:grid-cols-2">
+          {problems.map((item, index) => {
+            const Icon = problemIcons[item.icon];
+            return (
+              <Reveal key={item.title} delay={(index % 2) * 90} className="h-full">
+                <article className="flex h-full flex-col rounded-xl border border-line bg-panel p-6 md:p-7">
+                  <div className="flex items-center gap-4">
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-copper/30 bg-copper/10 text-copper">
+                      <Icon size={20} aria-hidden="true" />
+                    </span>
+                    <h3 className="text-xl font-semibold tracking-tight text-paper">{item.title}</h3>
+                  </div>
+                  <p className="mt-4 text-base leading-7 text-muted">{item.problem}</p>
+                  <div className="mt-5 flex-1 border-t border-line pt-5">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-copper">What I build</p>
+                    <p className="mt-2 text-base leading-7 text-paper">{item.solution}</p>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    {/* 02 — Case studies */}
+    <section id="work" className="scroll-mt-20 border-b border-line bg-panel/30">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <Reveal>
+          <SectionHeading
+            index="02"
+            label="Case studies"
+            title="Real problems, solved with software."
+            action={
+              <Link to="/projects" className="inline-flex items-center gap-2 font-mono text-sm text-muted transition hover:text-copper">
+                All projects <ArrowRight size={15} />
+              </Link>
+            }
+          />
+        </Reveal>
+        <div className="mt-12 space-y-8">
+          {caseStudies.slice(0, 3).map((study, index) => (
+            <Reveal key={study.id}>
+              <CaseStudy study={study} index={index} />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* 03 — How I work */}
+    <section id="how-i-work" className="scroll-mt-20 border-b border-line">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <Reveal>
+          <SectionHeading index="03" label="How I work" title="Simple steps, plain language, no surprises." />
+        </Reveal>
+        <ProcessSteps />
+      </div>
+    </section>
+
+    {/* 04 — About */}
+    <section id="about" className="scroll-mt-20 border-b border-line bg-panel/30">
+      <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:py-28 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
+        <Reveal>
+          <div className="mx-auto max-w-sm overflow-hidden rounded-xl border border-line bg-panel">
+            <Portrait alt="Jackson Khuto" className="aspect-square h-full w-full object-cover object-center" />
+          </div>
+        </Reveal>
+        <Reveal delay={100}>
+          <SectionHeading index="04" label="About" title="The person behind the software." />
+          <div className="mt-6 space-y-4">
+            {homeAbout.body.map((paragraph) => (
+              <p key={paragraph.slice(0, 24)} className="text-base leading-8 text-muted">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+          <dl className="mt-8 grid gap-4 sm:grid-cols-3">
+            {[
+              { icon: BriefcaseBusiness, term: 'Current role', detail: experience[0] ? `${experience[0].role}, ${experience[0].company}` : profile.role },
+              { icon: GraduationCap, term: 'Education', detail: `${education.degree}, North-West University` },
+              { icon: MapPin, term: 'Based in', detail: 'Gauteng, South Africa' },
+            ].map(({ icon: Icon, term, detail }) => (
+              <div key={term} className="rounded-lg border border-line bg-ink p-4">
+                <dt className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-slate">
+                  <Icon size={14} className="text-copper" aria-hidden="true" />
+                  {term}
+                </dt>
+                <dd className="mt-2 text-sm leading-6 text-paper">{detail}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <ButtonLink path="/about" variant="secondary">
+              More about me <ArrowRight size={16} />
+            </ButtonLink>
+            <a href={CV_PATH} download className={buttonClass('secondary')}>
+              <Download size={16} /> Download CV
+            </a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+
+    {/* 05 — Skills */}
+    <section id="skills" className="scroll-mt-20 border-b border-line">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <Reveal>
+          <SectionHeading
+            index="05"
+            label="Skills"
+            title="The tools behind the work."
+            action={
+              <Link to="/skills" className="inline-flex items-center gap-2 font-mono text-sm text-muted transition hover:text-copper">
+                All skills <ArrowRight size={15} />
+              </Link>
+            }
+          />
+        </Reveal>
+        <SkillGroups />
+      </div>
+    </section>
+
+    <FinalCta />
+  </>
+);
+
+const SkillGroups = () => (
+  <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {/* Groups with no items yet (e.g. Mobile) stay hidden until filled in. */}
+    {stackGroups
+      .filter((group) => group.items.length > 0)
+      .map((group, index) => (
+        <Reveal key={group.label} delay={(index % 3) * 70} className="h-full">
+          <article className="h-full rounded-xl border border-line bg-panel p-5">
+            <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-copper">{group.label}</h3>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {group.items.map((item) => (
+                <li key={item} className="rounded-md border border-line bg-ink px-2.5 py-1.5 font-mono text-xs text-paper">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </article>
+        </Reveal>
+      ))}
+  </div>
+);
+
+const FinalCta = () => (
+  <section id="contact" className="relative scroll-mt-20 overflow-hidden border-b border-line">
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_120%,rgba(201,128,61,0.18),transparent_60%)]" />
+    <div className="relative mx-auto max-w-4xl px-6 py-24 text-center md:py-32">
+      <Reveal>
+        <h2 className="text-balance text-4xl font-semibold tracking-tight text-paper md:text-6xl">
+          Have a process stuck in spreadsheets? <span className="text-copper">Let's fix it.</span>
+        </h2>
+        <p className="mx-auto mt-6 max-w-xl text-pretty text-base leading-8 text-muted md:text-lg">
+          Tell me how the work happens today. I'll come back with a few questions and an honest view of what's worth building first.
+        </p>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <a href={bookChatHref} className={buttonClass('primary')}>
+            <Mail size={16} /> Book a chat
+          </a>
+          <ButtonLink path="/contact" variant="secondary">
+            Send a message <ArrowRight size={16} />
+          </ButtonLink>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
 
 const Hero = () => {
   const ref = useRef<HTMLElement>(null);
@@ -528,108 +534,60 @@ const Hero = () => {
       />
       <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-14 sm:py-20 lg:grid-cols-[1.3fr_0.7fr] lg:items-center lg:gap-12 lg:py-28">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-copper/30 bg-copper/5 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-copper">
-            <span aria-hidden="true" className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-copper opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-copper" />
-            </span>
-            Full-stack software developer
-          </div>
+          <p className="inline-flex items-center gap-2 rounded-full border border-copper/30 bg-copper/5 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-copper">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-copper" />
+            For service &amp; equipment businesses
+          </p>
           <h1 className="mt-6 text-balance text-[clamp(2.5rem,4.8vw,4.25rem)] font-semibold leading-[1.05] tracking-tight text-paper">
             Software that takes the busywork <span className="text-copper">off your team.</span>
           </h1>
           <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-muted sm:text-xl sm:leading-9">
-            Hi, I'm <span className="text-paper">Jackson Khuto</span>. I build internal tools, approval workflows, secure sign-in and dashboards that replace spreadsheets, email chains and manual steps.
+            I build internal tools, approval workflows, dashboards and mobile apps for service and equipment businesses.
           </p>
           <ul className="mt-7 grid gap-2.5 text-sm text-paper sm:grid-cols-3 sm:gap-4">
             {['Built around your real process', 'Secure from day one', 'Supported after launch'].map((item) => (
               <li key={item} className="flex items-center gap-2">
-                <CheckCircle2 size={16} className="shrink-0 text-copper" />
+                <CheckCircle2 size={16} className="shrink-0 text-copper" aria-hidden="true" />
                 {item}
               </li>
             ))}
           </ul>
           <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink path="/contact">
-              Tell me what you need <ArrowRight size={16} />
-            </ButtonLink>
-            <ButtonLink path="/services" variant="secondary">
-              See what I build
-            </ButtonLink>
-          </div>
-          <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-line pt-6">
-            <span className="inline-flex items-center gap-2 font-mono text-xs text-slate">
-              <MapPin size={14} className="text-copper" />
-              {profile.location}
-            </span>
-            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-mono text-xs text-muted transition hover:text-copper">
-              <GithubIcon size={15} /> GitHub
+            <a href={bookChatHref} className={buttonClass('primary')}>
+              <Mail size={16} /> Book a chat
             </a>
-            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-mono text-xs text-muted transition hover:text-copper">
-              <LinkedinIcon size={15} /> LinkedIn
+            <a href="#work" className={buttonClass('secondary')}>
+              See my work <ArrowRight size={16} />
             </a>
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-line bg-panel shadow-2xl shadow-black/30">
-          <div className="flex items-center gap-2 border-b border-line px-4 py-3">
-            <span className="h-2.5 w-2.5 rounded-full bg-line" />
-            <span className="h-2.5 w-2.5 rounded-full bg-line" />
-            <span className="h-2.5 w-2.5 rounded-full bg-line" />
-            <span className="ml-3 font-mono text-[11px] text-slate">~/jackson — help</span>
-          </div>
-          <div className="relative grid place-items-center overflow-hidden bg-[radial-gradient(circle_at_50%_35%,rgba(201,128,61,0.18),transparent_55%),linear-gradient(145deg,#161A20,#0B0E11_72%,#161D25)] px-6 py-9">
+        <figure className="overflow-hidden rounded-xl border border-line bg-panel shadow-2xl shadow-black/30">
+          <div className="relative grid place-items-center overflow-hidden bg-[radial-gradient(circle_at_50%_35%,rgba(201,128,61,0.18),transparent_55%),linear-gradient(145deg,#161A20,#0B0E11_72%,#161D25)] px-6 py-10">
             <div className="relative rounded-full bg-copper/10 p-2 shadow-[0_0_65px_rgba(201,128,61,0.12)]">
               <Portrait eager alt="Portrait of Jackson Khuto" className="h-52 w-52 rounded-full border-[3px] border-copper/60 object-cover object-center shadow-2xl shadow-black/40 sm:h-60 sm:w-60" />
             </div>
           </div>
-          <div className="border-t border-line bg-ink/60 px-5 py-4 font-mono text-xs leading-6">
-            <p>
-              <span className="text-copper">$</span> <span className="text-paper">jackson --help</span>
-            </p>
-            <dl className="mt-1 grid grid-cols-[4.5rem_1fr] gap-x-3 text-muted">
-              <dt className="text-slate">name</dt>
-              <dd className="text-paper">{profile.name}</dd>
-              <dt className="text-slate">role</dt>
-              <dd>{profile.role}</dd>
-              <dt className="text-slate">builds</dt>
-              <dd>
-                internal tools · workflows · secure login · APIs · dashboards
-                <span className="ml-0.5 inline-block h-3.5 w-1.5 translate-y-0.5 animate-blink bg-copper" />
-              </dd>
-            </dl>
-          </div>
-        </div>
+          <figcaption className="border-t border-line px-6 py-5">
+            <p className="text-lg font-semibold text-paper">{profile.name}</p>
+            <p className="mt-1 text-sm text-muted">Full-stack developer · Gauteng, South Africa</p>
+            <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="What I build">
+              {['Internal tools', 'Approval workflows', 'Dashboards', 'Mobile apps'].map((item) => (
+                <li key={item} className="rounded-full border border-line bg-ink px-2.5 py-1 font-mono text-[11px] text-muted">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
 };
 
-const ServiceCard = ({ service }: { service: Service }) => {
-  const Icon = serviceIcons[service.icon];
-  return (
-    <article className="flex h-full flex-col rounded-xl border border-line bg-panel p-6 transition duration-300 hover:-translate-y-0.5 hover:border-copper/60 hover:shadow-xl hover:shadow-black/30">
-      <span className="grid h-10 w-10 place-items-center rounded-lg border border-copper/30 bg-copper/10 text-copper">
-        <Icon size={19} />
-      </span>
-      <p className="mt-5 text-sm italic leading-6 text-muted">“{service.problem}”</p>
-      <h3 className="mt-3 text-xl font-semibold tracking-tight text-paper">{service.title}</h3>
-      <p className="mt-3 flex-1 text-sm leading-7 text-muted">{service.pitch}</p>
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
-        <Link to={service.proof.path} className="inline-flex items-center gap-1.5 font-mono text-xs text-muted transition hover:text-copper">
-          {service.proof.label} <ArrowRight size={13} />
-        </Link>
-        <Link to={contactLink(service.topic)} className="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-copper transition hover:text-copper-bright">
-          I need this <ArrowUpRight size={13} />
-        </Link>
-      </div>
-    </article>
-  );
-};
-
 const ProcessSteps = () => (
   <>
-    <ol className="mt-12 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+    <ol className="mt-12 grid gap-px overflow-hidden rounded-xl border border-line bg-line md:grid-cols-3">
       {processSteps.map((step, index) => (
         <li key={step.title} className="bg-ink">
           <Reveal delay={index * 90} className="h-full p-6">
@@ -649,46 +607,6 @@ const ProcessSteps = () => (
       </p>
     </Reveal>
   </>
-);
-
-const FeaturedProject = ({ project }: { project: Project }) => (
-  <article className="group relative grid overflow-hidden rounded-xl border border-line bg-panel transition hover:border-copper/60 lg:grid-cols-[0.95fr_1.05fr]">
-    <div className="flex flex-col p-6 md:p-8">
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="rounded-full border border-copper/40 bg-copper/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-copper">Featured</span>
-        <StatusBadge status={project.status} />
-      </div>
-      <h3 className="mt-5 text-3xl font-semibold tracking-tight text-paper">{project.name}</h3>
-      <p className="mt-2 text-copper">{project.description}</p>
-      <ul className="mt-6 space-y-2.5">
-        {project.highlights.slice(0, 4).map((item) => (
-          <li key={item} className="flex gap-2.5 text-sm leading-6 text-muted">
-            <CheckCircle2 size={15} className="mt-1 shrink-0 text-copper" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-      <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-3 pt-8">
-        <Link to={project.path} className={buttonClass('primary')}>
-          Read case study <ArrowRight size={16} />
-        </Link>
-        <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-mono text-sm text-muted transition hover:text-copper">
-          <GithubIcon size={15} /> Source
-        </a>
-      </div>
-    </div>
-    <div className="relative flex flex-col justify-center gap-6 border-t border-line bg-ink/60 bg-grid p-6 md:p-8 lg:border-l lg:border-t-0">
-      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-slate">Request flow</p>
-      <ArchitectureFlow flow={project.flow} />
-      <div className="flex flex-wrap gap-1.5">
-        {project.stack.map((tech) => (
-          <span key={tech} className="rounded border border-line bg-panel px-2 py-1 font-mono text-[11px] text-muted">
-            {tech}
-          </span>
-        ))}
-      </div>
-    </div>
-  </article>
 );
 
 const ProjectCard = ({ project }: { project: Project }) => (
@@ -720,54 +638,6 @@ const ProjectCard = ({ project }: { project: Project }) => (
     </div>
   </article>
 );
-
-const Timeline = () => {
-  const items = [
-    ...experience.map((job) => ({
-      icon: BriefcaseBusiness,
-      title: job.role,
-      org: job.current ? 'Current role' : 'Previous role',
-      meta: job.period,
-      current: job.current,
-    })),
-    {
-      icon: GraduationCap,
-      title: education.degree,
-      org: education.school,
-      meta: education.period,
-      current: false,
-    },
-  ];
-
-  return (
-    <ol className="relative space-y-4 before:absolute before:bottom-6 before:left-[1.4rem] before:top-6 before:w-px before:bg-line">
-      {items.map((item) => {
-        const Icon = item.icon;
-        return (
-          <li key={item.title} className="relative flex gap-5 rounded-xl border border-line bg-panel p-5">
-            <span className={`relative z-10 grid h-6 w-6 shrink-0 place-items-center rounded-full border ${item.current ? 'border-copper bg-copper/15 text-copper' : 'border-line bg-ink text-slate'}`}>
-              <Icon size={13} />
-            </span>
-            <div className="min-w-0">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-copper">{item.org}</p>
-              <h3 className="mt-1.5 text-lg font-semibold text-paper">{item.title}</h3>
-              <p className="mt-1 font-mono text-xs text-slate">{item.meta}</p>
-              {item.current && (
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {['React', 'TypeScript', 'Node.js', 'Entra ID', 'Azure', 'IIS'].map((tech) => (
-                    <span key={tech} className="rounded border border-line bg-ink px-2 py-0.5 font-mono text-[11px] text-muted">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </li>
-        );
-      })}
-    </ol>
-  );
-};
 
 const AudienceCta = ({ index }: { index?: string }) => (
   <section className="relative overflow-hidden border-b border-line">
@@ -909,7 +779,7 @@ const AboutPage = () => (
             <dd className="mt-1 text-paper">{profile.location}</dd>
           </div>
         </dl>
-        <a href="/Jackson-Khuto-CV.pdf" download className={`${buttonClass('secondary')} mt-6 w-full justify-center`}>
+        <a href={CV_PATH} download className={`${buttonClass('secondary')} mt-6 w-full justify-center`}>
           Download CV
         </a>
       </aside>
@@ -1107,9 +977,11 @@ const ProjectPage = ({ project }: { project: Project }) => {
 };
 
 const SkillsPage = () => (
-  <PageShell eyebrow="/skills" title="Practical skills by engineering surface." intro="Grouped by where each skill shows up in delivery. No decorative progress bars, just the stack and the kind of work it supports.">
+  <PageShell eyebrow="/skills" title="Skills, grouped by the work they support." intro="The tools I use to build internal business software, from the screens people use to the data and cloud behind them. No skill bars or percentages.">
     <div className="grid gap-5 md:grid-cols-2">
-      {stackGroups.map((group, index) => (
+      {stackGroups
+        .filter((group) => group.items.length > 0)
+        .map((group, index) => (
         <Reveal key={group.label} delay={(index % 2) * 80} className="h-full">
           <article className="h-full rounded-xl border border-line bg-panel p-6">
             <h2 className="font-mono text-sm font-semibold uppercase tracking-[0.12em] text-copper">{group.label}</h2>
@@ -1130,10 +1002,11 @@ const SkillsPage = () => (
 const ContactPage = () => {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const [topic, setTopic] = useState(() => {
+  const [topic, setTopic] = useState('');
+  useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get('topic');
-    return requested && contactTopics.includes(requested) ? requested : '';
-  });
+    if (requested && contactTopics.includes(requested)) setTopic(requested);
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1271,13 +1144,18 @@ const ContactPage = () => {
   );
 };
 
-const NotFoundPage = () => (
+const NotFoundPage = ({ path: initialPath }: { path: string }) => {
+  // 404.html is prerendered once and served for every unknown URL, so show the real path only after hydrating.
+  const [path, setPath] = useState('');
+  useEffect(() => setPath(initialPath), [initialPath]);
+
+  return (
   <section className="border-b border-line bg-grid">
     <div className="mx-auto max-w-3xl px-6 py-28 text-center md:py-40">
       <p className="font-mono text-xs uppercase tracking-[0.18em] text-copper">404</p>
       <h1 className="mt-4 text-4xl font-semibold tracking-tight text-paper md:text-6xl">This route returned nothing.</h1>
       <p className="mt-5 font-mono text-sm text-muted">
-        <span className="text-copper">GET</span> {window.location.pathname} → <span className="text-paper">404 Not Found</span>
+        <span className="text-copper">GET</span> {path} → <span className="text-paper">404 Not Found</span>
       </p>
       <div className="mt-10 flex flex-wrap justify-center gap-3">
         <ButtonLink path="/">
@@ -1292,7 +1170,8 @@ const NotFoundPage = () => (
       </p>
     </div>
   </section>
-);
+  );
+};
 
 const Field = ({ label, name, type = 'text', autoComplete, placeholder }: { label: string; name: string; type?: string; autoComplete: string; placeholder: string }) => (
   <label className="grid gap-2 font-mono text-xs text-muted">

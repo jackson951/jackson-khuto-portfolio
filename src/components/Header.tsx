@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Command, Download, Mail, Menu, X } from 'lucide-react';
 import { Link } from './Link';
+import { bookChatHref } from '../data/portfolio';
 
 interface NavItem {
   label: string;
@@ -75,14 +76,14 @@ export const Header = ({ currentPath, navItems, onOpenPalette }: HeaderProps) =>
             <Command size={14} />
             <span className="hidden sm:inline">K</span>
           </button>
-          <a href="/Jackson-Khuto-CV.pdf" download className="hidden items-center gap-2 rounded-md border border-line px-3 py-2 font-mono text-xs text-paper transition-colors hover:border-copper hover:text-copper md:inline-flex">
+          <a href="/Jackson_Khuto_CV.pdf" download className="hidden items-center gap-2 rounded-md border border-line px-3 py-2 font-mono text-xs text-paper transition-colors hover:border-copper hover:text-copper md:inline-flex">
             <Download size={15} />
             CV
           </a>
-          <Link to="/contact" className="hidden items-center gap-2 rounded-md bg-copper px-3 py-2 font-mono text-xs font-medium text-ink transition-colors hover:bg-copper-bright md:inline-flex">
-            <Mail size={15} />
-            Contact
-          </Link>
+          <a href={bookChatHref} className="hidden items-center gap-2 rounded-md bg-copper px-3 py-2 font-mono text-xs font-medium text-ink transition-colors hover:bg-copper-bright md:inline-flex">
+            <Mail size={15} aria-hidden="true" />
+            Book a chat
+          </a>
           <button type="button" className="p-1 text-paper lg:hidden" onClick={() => setOpen((value) => !value)} aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="mobile-nav">
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -105,7 +106,7 @@ export const Header = ({ currentPath, navItems, onOpenPalette }: HeaderProps) =>
               </Link>
             );
           })}
-          <a href="/Jackson-Khuto-CV.pdf" download className="mt-3 inline-flex items-center justify-center gap-2 rounded-md border border-line px-3 py-3 font-mono text-sm text-paper transition-colors hover:border-copper hover:text-copper">
+          <a href="/Jackson_Khuto_CV.pdf" download className="mt-3 inline-flex items-center justify-center gap-2 rounded-md border border-line px-3 py-3 font-mono text-sm text-paper transition-colors hover:border-copper hover:text-copper">
             <Download size={16} />
             Download CV
           </a>

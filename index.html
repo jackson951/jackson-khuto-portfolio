@@ -3,54 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jackson Khuto — Software that takes the busywork off your team</title>
-    <meta name="description" content="Jackson Khuto is a full-stack developer who builds internal tools, approval workflows, secure sign-in, APIs and dashboards that replace spreadsheets, email chains and manual steps." />
     <meta name="author" content="Jackson Khuto" />
     <meta name="theme-color" content="#0B0E11" />
     <meta name="color-scheme" content="dark" />
 
+    <!-- Per-page title, description, canonical, Open Graph, Twitter and JSON-LD are injected here at build time (scripts/prerender.mjs). -->
+    <!--app-head-->
+
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B0E11'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' text-anchor='middle' fill='%23EDEDE8'%3Ejk%3Ctspan fill='%23C9803D'%3E.%3C/tspan%3E%3C/text%3E%3C/svg%3E" />
     <link rel="apple-touch-icon" href="/profile.jpg" />
 
-    <!-- Social previews -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Jackson Khuto" />
-    <meta property="og:title" content="Jackson Khuto — Software that takes the busywork off your team" />
-    <meta property="og:description" content="Internal tools, approval workflows, secure sign-in, APIs and dashboards that replace spreadsheets, email chains and manual steps." />
-    <meta property="og:image" content="/og.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Jackson Khuto, Full-Stack Software Developer" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="/og.jpg" />
-
-    <!-- Fonts: preconnect so text renders sooner -->
+    <!-- Fonts load without blocking the first paint; system fonts show until they arrive. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
-    <link rel="preload" as="image" href="/profile.webp" type="image/webp" />
-
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Jackson Khuto",
-        "jobTitle": "Full-Stack Software Developer",
-        "alumniOf": { "@type": "CollegeOrUniversity", "name": "North-West University" },
-        "address": { "@type": "PostalAddress", "addressLocality": "Midrand", "addressRegion": "Gauteng", "addressCountry": "ZA" },
-        "image": "/profile.jpg",
-        "sameAs": ["https://github.com/jackson951", "https://www.linkedin.com/in/jackson-khuto-03533437b/"],
-        "knowsAbout": ["React", "TypeScript", "Node.js", "ASP.NET Core", "Microsoft Azure", "PostgreSQL", "Microsoft Entra ID"]
-      }
-    </script>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+      <!-- Without JavaScript, scroll-reveal content must still be visible. -->
+      <style>.reveal{opacity:1!important;transform:none!important}</style>
+    </noscript>
   </head>
   <body>
-    <noscript>
-      <div style="padding:2rem;font-family:system-ui;color:#EDEDE8;background:#0B0E11">
-        Jackson Khuto, Full-Stack Software Developer. Email: jacksonkhuto591@gmail.com · GitHub: github.com/jackson951
-      </div>
-    </noscript>
-    <div id="root"></div>
+    <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

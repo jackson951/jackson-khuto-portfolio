@@ -42,7 +42,7 @@ export const Reveal = ({ children, delay = 0, className = '' }: { children: Reac
     <div
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-[opacity,transform] duration-700 ease-out-expo ${visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} ${className}`}
+      className={`reveal transition-[opacity,transform] duration-700 ease-out-expo ${visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} ${className}`}
     >
       {children}
     </div>

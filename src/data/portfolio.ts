@@ -155,13 +155,14 @@ export const projects: Project[] = [
 ];
 
 export const stackGroups: { label: string; items: string[] }[] = [
-  { label: 'languages', items: ['C#', 'TypeScript', 'JavaScript', 'SQL', 'Java'] },
-  { label: 'frontend', items: ['React.js', 'Next.js', 'Tailwind CSS'] },
-  { label: 'backend', items: ['ASP.NET Core', 'Express.js', 'Spring Boot', 'NestJS'] },
-  { label: 'databases', items: ['SQL Server', 'PostgreSQL', 'MongoDB'] },
-  { label: 'cloud & deployment', items: ['Microsoft Azure', 'IIS', 'Docker', 'GitHub Actions'] },
-  { label: 'microsoft ecosystem', items: ['MS Entra ID', 'SharePoint'] },
-  { label: 'practices', items: ['REST APIs', 'Agile / Scrum', 'CI/CD', 'Code Review'] },
+  { label: 'Frontend', items: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS'] },
+  { label: 'Backend', items: ['Node.js', 'Express', 'NestJS', 'ASP.NET Core (C#)', 'Spring Boot (Java)', 'REST APIs'] },
+  { label: 'Data', items: ['SQL Server', 'PostgreSQL', 'MongoDB', 'Prisma', 'Excel reporting'] },
+  { label: 'Cloud', items: ['Microsoft Azure', 'Microsoft Entra ID', 'IIS', 'Docker', 'GitHub Actions'] },
+  // TODO(Jackson): add the mobile tools you use (e.g. React Native, Expo, Flutter). Hidden while empty.
+  { label: 'Mobile', items: [] },
+  // TODO(Jackson): add Power Apps / Power Automate / Power BI here if you use them.
+  { label: 'Low-code / Power Platform', items: ['SharePoint'] },
 ];
 
 export const profile = {
@@ -217,7 +218,7 @@ export const experienceImpactGroups: { title: string; points: string[] }[] = [
 
 export const experience: ExperienceEntry[] = [
   {
-    role: 'Software Developer',
+    role: 'Graduate Intern: Application Development & Support',
     company: 'Barloworld Equipment',
     location: 'Isando, Gauteng',
     period: 'Dec 2025 — Present',
@@ -324,20 +325,16 @@ export const services: Service[] = [
 
 export const processSteps: { title: string; body: string }[] = [
   {
-    title: 'Talk it through',
-    body: 'We start with the process, the people involved, and what "done" looks like. No jargon needed.',
+    title: 'Discover',
+    body: "We walk through how the work happens today, what's slowing your team down, and what better looks like. I turn that into a plain-language plan for what to build first.",
   },
   {
-    title: 'Plan the build',
-    body: 'I map out the screens, data and integrations so you can see the plan before any code is written.',
+    title: 'Build in short iterations',
+    body: 'You see working software early and often, and your feedback shapes each round, so there are no big surprises at the end.',
   },
   {
-    title: 'Build in small steps',
-    body: 'You see working software early and often, so your feedback shapes the product along the way.',
-  },
-  {
-    title: 'Launch and support',
-    body: 'I deploy it, document it, and stay around for fixes and improvements after go-live.',
+    title: 'Hand over & support',
+    body: "I deploy it, show your team how to use it, write simple documentation, and stay available for fixes and improvements.",
   },
 ];
 
@@ -375,3 +372,45 @@ export const contactTopics = [
   'Full-time role',
   'Something else',
 ];
+
+/** "Problems I solve": the business pain, then what I build to fix it. */
+export const problems: { title: string; problem: string; solution: string; icon: 'approvals' | 'spreadsheets' | 'field' | 'visibility' }[] = [
+  {
+    icon: 'approvals',
+    title: 'Approvals stuck in email',
+    problem: 'Requests sit in inboxes, people chase each other for sign-off, and nobody knows where things stand.',
+    solution: 'An approval workflow that routes each request to the right person, shows its status to everyone, and logs every decision.',
+  },
+  {
+    icon: 'spreadsheets',
+    title: 'Data living in spreadsheets',
+    problem: 'Five versions of the same file, copy-paste errors, and one person who "owns" the master sheet.',
+    solution: 'One shared system with proper forms, search and reports, so your team works from a single version of the truth.',
+  },
+  {
+    icon: 'field',
+    title: 'Field teams on paper job cards',
+    problem: 'Job cards get lost, handwriting gets misread, and the office re-types everything at the end of the day.',
+    solution: 'A mobile-friendly app for job cards, photos and sign-offs that lands in the office system straight away.',
+  },
+  {
+    icon: 'visibility',
+    title: 'No visibility for managers',
+    problem: "Getting a simple answer like \"what's overdue?\" means asking around or building a report by hand.",
+    solution: "Live dashboards and one-click Excel reports showing what's open, overdue and done, by team, site or person.",
+  },
+];
+
+export const homeAbout = {
+  body: [
+    "I'm Jackson, a full-stack developer based in Gauteng, South Africa. I build software for the unglamorous, everyday work that keeps a business running: requests, approvals, records and reports.",
+    "I'm currently a Graduate Intern in Application Development & Support at Barloworld Equipment, working on internal business applications: request and approval workflows, dashboards, reporting and secure company sign-in. I hold a BSc in Information Technology from North-West University.",
+  ],
+};
+
+export const CV_PATH = '/Jackson_Khuto_CV.pdf';
+
+/** "Book a chat" opens the visitor's email app with a ready-made subject and opening line. */
+export const bookChatHref = `mailto:jacksonkhuto591@gmail.com?subject=${encodeURIComponent("Let's chat about a project")}&body=${encodeURIComponent(
+  "Hi Jackson,\n\nHere's a bit about our business and the process we'd like to improve:\n\n",
+)}`;

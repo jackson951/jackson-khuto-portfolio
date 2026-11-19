@@ -69,7 +69,7 @@ export const CommandPalette = ({ open, onClose, onNavigate, pages }: CommandPale
         icon: <Download size={15} />,
         run: () => {
           const link = document.createElement('a');
-          link.href = '/Jackson-Khuto-CV.pdf';
+          link.href = '/Jackson_Khuto_CV.pdf';
           link.download = '';
           link.click();
           onClose();

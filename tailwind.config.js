@@ -9,7 +9,7 @@ export default {
         line: '#1E2228',
         paper: '#EDEDE8',
         muted: '#9AA1AC',
-        slate: '#5B6573',
+        slate: '#8590A0',
         copper: '#C9803D',
         'copper-bright': '#E0A05E',
       },
