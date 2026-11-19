@@ -230,3 +230,148 @@ export const education = {
   school: 'North-West University, Vanderbijlpark',
   period: 'Feb 2022 – Dec 2024',
 };
+
+/* ------------------------------------------------------------------ */
+/* What I offer — the "advertisement" side of the portfolio           */
+/* ------------------------------------------------------------------ */
+
+export type ServiceIcon = 'tools' | 'workflow' | 'security' | 'api' | 'reporting' | 'launch';
+
+export interface Service {
+  id: string;
+  icon: ServiceIcon;
+  title: string;
+  /** The pain the visitor recognises, phrased the way they'd say it. */
+  problem: string;
+  /** What I build to fix it. */
+  pitch: string;
+  deliverables: string[];
+  tech: string[];
+  /** Where to see it done: a project path, or the experience page. */
+  proof: { label: string; path: string };
+  /** Pre-selects this topic on the contact form. */
+  topic: string;
+}
+
+export const services: Service[] = [
+  {
+    id: 'internal-tools',
+    icon: 'tools',
+    title: 'Internal business tools',
+    problem: 'Your team runs on spreadsheets, email chains and copy-paste.',
+    pitch: 'A web app built around how your team actually works: forms, screens, search and records in one place everyone can use.',
+    deliverables: ['Role-specific screens and dashboards', 'Forms with proper validation', 'Search, filters and exports', 'Works on desktop and mobile'],
+    tech: ['React', 'TypeScript', 'Node.js', 'SQL'],
+    proof: { label: 'See FlexiLeave', path: '/projects/flexileave-app' },
+    topic: 'Internal tool',
+  },
+  {
+    id: 'workflow',
+    icon: 'workflow',
+    title: 'Approval & workflow automation',
+    problem: 'Requests get lost, approvals stall, and nobody knows the status.',
+    pitch: 'Turn a manual process into a tracked workflow with clear steps, approvals, history, and background jobs that run on their own.',
+    deliverables: ['Multi-step approval flows', 'Status tracking and audit history', 'Scheduled and background jobs', 'Safe retries when something fails'],
+    tech: ['NestJS', 'Express', 'Redis', 'BullMQ'],
+    proof: { label: 'See FlowForge', path: '/projects/flowforge' },
+    topic: 'Workflow automation',
+  },
+  {
+    id: 'security',
+    icon: 'security',
+    title: 'Secure sign-in & access control',
+    problem: 'Everyone can see everything, or the login was bolted on as an afterthought.',
+    pitch: 'Single sign-on with Microsoft Entra ID, or JWT-based login, with roles that decide exactly who can see and do what.',
+    deliverables: ['Microsoft Entra ID / MSAL single sign-on', 'Role-based access control', 'Protected APIs and routes', 'Microsoft Graph integration'],
+    tech: ['Entra ID', 'MSAL', 'JWT', 'Azure'],
+    proof: { label: 'See my experience', path: '/experience' },
+    topic: 'Secure login / SSO',
+  },
+  {
+    id: 'apis',
+    icon: 'api',
+    title: 'APIs & system integrations',
+    problem: "Your systems don't talk to each other, so people re-type the same data.",
+    pitch: 'Clean, documented REST APIs and integrations that move data between your apps, databases and third-party services.',
+    deliverables: ['REST API design and build', 'Webhooks and third-party integrations', 'Database design', 'Clear API documentation'],
+    tech: ['ASP.NET Core', 'Node.js', 'PostgreSQL', 'SQL Server'],
+    proof: { label: 'See FlowForge', path: '/projects/flowforge' },
+    topic: 'API or integration',
+  },
+  {
+    id: 'reporting',
+    icon: 'reporting',
+    title: 'Dashboards & reporting',
+    problem: 'Getting a simple answer means an afternoon in Excel.',
+    pitch: 'Dashboards and one-click Excel reports built on the data you already have, so decisions take minutes instead of days.',
+    deliverables: ['Live operational dashboards', 'Excel report exports', 'Audit logs', 'Filter by team, date or status'],
+    tech: ['React', 'SQL', 'Excel export', 'REST APIs'],
+    proof: { label: 'See my experience', path: '/experience' },
+    topic: 'Dashboard / reporting',
+  },
+  {
+    id: 'launch',
+    icon: 'launch',
+    title: 'Deployment & ongoing support',
+    problem: 'It works on one laptop, and nobody wants to touch production.',
+    pitch: 'Reliable deployments to Azure or IIS, environment setup, documentation, and fixes and improvements after go-live.',
+    deliverables: ['Azure and IIS deployments', 'Docker and CI/CD pipelines', 'Documentation and handover', 'Bug fixes and enhancements'],
+    tech: ['Azure', 'IIS', 'Docker', 'GitHub Actions'],
+    proof: { label: 'See my experience', path: '/experience' },
+    topic: 'Deployment & support',
+  },
+];
+
+export const processSteps: { title: string; body: string }[] = [
+  {
+    title: 'Talk it through',
+    body: 'We start with the process, the people involved, and what "done" looks like. No jargon needed.',
+  },
+  {
+    title: 'Plan the build',
+    body: 'I map out the screens, data and integrations so you can see the plan before any code is written.',
+  },
+  {
+    title: 'Build in small steps',
+    body: 'You see working software early and often, so your feedback shapes the product along the way.',
+  },
+  {
+    title: 'Launch and support',
+    body: 'I deploy it, document it, and stay around for fixes and improvements after go-live.',
+  },
+];
+
+export const audiences: { id: 'business' | 'team' | 'hiring'; title: string; body: string; cta: string; topic: string }[] = [
+  {
+    id: 'business',
+    title: 'You have a manual process',
+    body: 'Spreadsheets, paper forms or email approvals that should be a proper system.',
+    cta: 'Describe your process',
+    topic: 'Internal tool',
+  },
+  {
+    id: 'team',
+    title: 'Your team needs another developer',
+    body: 'Extra hands on a React, Node.js or .NET codebase, an API, or an integration.',
+    cta: 'Tell me about the project',
+    topic: 'Something else',
+  },
+  {
+    id: 'hiring',
+    title: "You're hiring a full-stack developer",
+    body: 'Someone who can take a feature from requirements to production and support it.',
+    cta: 'Talk about the role',
+    topic: 'Full-time role',
+  },
+];
+
+export const contactTopics = [
+  'Internal tool',
+  'Workflow automation',
+  'Secure login / SSO',
+  'API or integration',
+  'Dashboard / reporting',
+  'Deployment & support',
+  'Full-time role',
+  'Something else',
+];

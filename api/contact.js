@@ -33,7 +33,7 @@ export default async function handler(request, response) {
     return response.status(500).json({ message: 'Email is not configured' });
   }
 
-  const { name, email, message, company } = request.body ?? {};
+  const { name, email, message, company, topic } = request.body ?? {};
 
   // Honeypot field: real visitors never see it, so anything here is a bot. Pretend success.
   if (company) {
@@ -43,6 +43,8 @@ export default async function handler(request, response) {
   const trimmedName = String(name ?? '').trim();
   const trimmedEmail = String(email ?? '').trim();
   const trimmedMessage = String(message ?? '').trim();
+  // Optional "What do you need?" choice from the form; keep it short and single-line.
+  const trimmedTopic = String(topic ?? '').replace(/[\r\n]+/g, ' ').trim().slice(0, 60);
 
   if (!trimmedName || !trimmedEmail || !trimmedMessage) {
     return response.status(400).json({ message: 'All fields are required' });
@@ -71,16 +73,18 @@ export default async function handler(request, response) {
       from: process.env.CONTACT_FROM ?? process.env.SMTP_USER,
       to: process.env.CONTACT_TO,
       replyTo: trimmedEmail,
-      subject: `Portfolio message from ${trimmedName.replace(/[\r\n]+/g, ' ')}`,
+      subject: `${trimmedTopic ? `[${trimmedTopic}] ` : ''}Portfolio message from ${trimmedName.replace(/[\r\n]+/g, ' ')}`,
       text: [
         `Name: ${trimmedName}`,
         `Email: ${trimmedEmail}`,
+        `Topic: ${trimmedTopic || 'Not specified'}`,
         '',
         trimmedMessage,
       ].join('\n'),
       html: `
         <p><strong>Name:</strong> ${escapeHtml(trimmedName)}</p>
         <p><strong>Email:</strong> ${escapeHtml(trimmedEmail)}</p>
+        <p><strong>Topic:</strong> ${escapeHtml(trimmedTopic || 'Not specified')}</p>
         <p>${escapeHtml(trimmedMessage).replaceAll('\n', '<br>')}</p>
       `,
     });

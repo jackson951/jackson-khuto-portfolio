@@ -12,7 +12,7 @@ export const Footer = () => {
           © {year} {profile.name}. Designed &amp; built with React, TypeScript &amp; Tailwind.
         </span>
         <div className="flex flex-wrap items-center gap-4">
-          {['/projects', '/skills', '/contact'].map((path) => (
+          {['/services', '/projects', '/contact'].map((path) => (
             <Link key={path} to={path} className="transition-colors hover:text-copper">
               {path}
             </Link>
