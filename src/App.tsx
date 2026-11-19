@@ -22,7 +22,6 @@ import {
   Plug,
   Rocket,
   ShieldCheck,
-  Sparkles,
   UserSearch,
   Users,
   Workflow,
@@ -37,32 +36,14 @@ import { Reveal } from './components/Reveal';
 import { ArchitectureFlow } from './components/ArchitectureFlow';
 import { CommandPalette } from './components/CommandPalette';
 import { CaseStudy } from './components/CaseStudy';
-import { caseStudies } from './data/caseStudies';
-import {
-  CV_PATH,
-  audiences,
-  bookChatHref,
-  contactTopics,
-  education,
-  experience,
-  experienceImpactGroups,
-  homeAbout,
-  problems,
-  profile,
-  processSteps,
-  projects,
-  services,
-  stackGroups,
-  type Project,
-  type ServiceIcon,
-} from './data/portfolio';
+import { audiences, contactTopics, problems, processSteps, services, type ServiceIcon } from './data/copy';
+import { bookChatHref, caseStudies, githubHandle, projects, site, stackGroups, type Project } from './data/site';
 import { metaFor, resolveRoute, type RouteState } from './seo';
 
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Services', path: '/services' },
   { label: 'Projects', path: '/projects' },
-  { label: 'Experience', path: '/experience' },
   { label: 'Skills', path: '/skills' },
   { label: 'About', path: '/about' },
   { label: 'Contact', path: '/contact' },
@@ -160,9 +141,6 @@ function App({ initialPath }: { initialPath: string }) {
       break;
     case 'about':
       page = <AboutPage />;
-      break;
-    case 'experience':
-      page = <ExperiencePage />;
       break;
     case 'projects':
       page = <ProjectsPage />;
@@ -284,7 +262,7 @@ const CopyEmailButton = ({ className = '' }: { className?: string }) => {
   return (
     <button
       type="button"
-      onClick={() => navigator.clipboard?.writeText(profile.email).then(() => setCopied(true))}
+      onClick={() => navigator.clipboard?.writeText(site.email).then(() => setCopied(true))}
       className={`${buttonClass('secondary')} ${className}`}
       aria-live="polite"
     >
@@ -325,8 +303,9 @@ const contactLink = (topic: string) => `/contact?topic=${encodeURIComponent(topi
 const problemIcons: Record<(typeof problems)[number]['icon'], LucideIcon> = {
   approvals: Inbox,
   spreadsheets: FileSpreadsheet,
-  field: ClipboardList,
+  paper: ClipboardList,
   visibility: Eye,
+  integration: Plug,
 };
 
 const HomePage = () => (
@@ -339,11 +318,13 @@ const HomePage = () => (
         <Reveal>
           <SectionHeading index="01" label="Problems I solve" title="Where the busywork usually hides." />
         </Reveal>
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
+        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           {problems.map((item, index) => {
             const Icon = problemIcons[item.icon];
+            // Five cards: two wide on the first row, three on the second.
+            const span = index < 2 ? 'lg:col-span-3' : 'lg:col-span-2';
             return (
-              <Reveal key={item.title} delay={(index % 2) * 90} className="h-full">
+              <Reveal key={item.title} delay={(index % 2) * 90} className={`h-full ${span} ${index === problems.length - 1 && problems.length % 2 ? 'md:col-span-2 lg:col-span-2' : ''}`}>
                 <article className="flex h-full flex-col rounded-xl border border-line bg-panel p-6 md:p-7">
                   <div className="flex items-center gap-4">
                     <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-copper/30 bg-copper/10 text-copper">
@@ -404,13 +385,13 @@ const HomePage = () => (
       <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:py-28 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
         <Reveal>
           <div className="mx-auto max-w-sm overflow-hidden rounded-xl border border-line bg-panel">
-            <Portrait alt="Jackson Khuto" className="aspect-square h-full w-full object-cover object-center" />
+            <Portrait alt={site.name} className="aspect-square h-full w-full object-cover object-center" />
           </div>
         </Reveal>
         <Reveal delay={100}>
           <SectionHeading index="04" label="About" title="The person behind the software." />
           <div className="mt-6 space-y-4">
-            {homeAbout.body.map((paragraph) => (
+            {site.bio.map((paragraph) => (
               <p key={paragraph.slice(0, 24)} className="text-base leading-8 text-muted">
                 {paragraph}
               </p>
@@ -418,9 +399,9 @@ const HomePage = () => (
           </div>
           <dl className="mt-8 grid gap-4 sm:grid-cols-3">
             {[
-              { icon: BriefcaseBusiness, term: 'Current role', detail: experience[0] ? `${experience[0].role}, ${experience[0].company}` : profile.role },
-              { icon: GraduationCap, term: 'Education', detail: `${education.degree}, North-West University` },
-              { icon: MapPin, term: 'Based in', detail: 'Gauteng, South Africa' },
+              { icon: BriefcaseBusiness, term: 'What I do', detail: 'Business applications, from requirements to support' },
+              { icon: GraduationCap, term: 'Education', detail: `${site.education.degree}, ${site.education.school}` },
+              { icon: MapPin, term: 'Based in', detail: site.location },
             ].map(({ icon: Icon, term, detail }) => (
               <div key={term} className="rounded-lg border border-line bg-ink p-4">
                 <dt className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-slate">
@@ -435,7 +416,7 @@ const HomePage = () => (
             <ButtonLink path="/about" variant="secondary">
               More about me <ArrowRight size={16} />
             </ButtonLink>
-            <a href={CV_PATH} download className={buttonClass('secondary')}>
+            <a href={site.cvPath} download className={buttonClass('secondary')}>
               <Download size={16} /> Download CV
             </a>
           </div>
@@ -512,6 +493,10 @@ const FinalCta = () => (
   </section>
 );
 
+// The headline's last words (site.taglineHighlight) are shown in the accent colour.
+const headlineHighlight = site.tagline.endsWith(site.taglineHighlight) ? site.taglineHighlight : '';
+const headlineLead = site.tagline.slice(0, site.tagline.length - headlineHighlight.length).trim();
+
 const Hero = () => {
   const ref = useRef<HTMLElement>(null);
 
@@ -534,16 +519,19 @@ const Hero = () => {
       />
       <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-14 sm:py-20 lg:grid-cols-[1.3fr_0.7fr] lg:items-center lg:gap-12 lg:py-28">
         <div className="max-w-3xl">
-          <p className="inline-flex items-center gap-2 rounded-full border border-copper/30 bg-copper/5 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-copper">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-copper" />
-            For service &amp; equipment businesses
-          </p>
-          <h1 className="mt-6 text-balance text-[clamp(2.5rem,4.8vw,4.25rem)] font-semibold leading-[1.05] tracking-tight text-paper">
-            Software that takes the busywork <span className="text-copper">off your team.</span>
+          {site.availability && (
+            <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-copper/30 bg-copper/5 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-copper">
+              <span aria-hidden="true" className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              </span>
+              {site.availability}
+            </p>
+          )}
+          <h1 className="text-balance text-[clamp(2.5rem,4.8vw,4.25rem)] font-semibold leading-[1.05] tracking-tight text-paper">
+            {headlineLead} <span className="text-copper">{headlineHighlight}</span>
           </h1>
-          <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-muted sm:text-xl sm:leading-9">
-            I build internal tools, approval workflows, dashboards and mobile apps for service and equipment businesses.
-          </p>
+          <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-muted sm:text-xl sm:leading-9">{site.subhead}</p>
           <ul className="mt-7 grid gap-2.5 text-sm text-paper sm:grid-cols-3 sm:gap-4">
             {['Built around your real process', 'Secure from day one', 'Supported after launch'].map((item) => (
               <li key={item} className="flex items-center gap-2">
@@ -565,14 +553,16 @@ const Hero = () => {
         <figure className="overflow-hidden rounded-xl border border-line bg-panel shadow-2xl shadow-black/30">
           <div className="relative grid place-items-center overflow-hidden bg-[radial-gradient(circle_at_50%_35%,rgba(201,128,61,0.18),transparent_55%),linear-gradient(145deg,#161A20,#0B0E11_72%,#161D25)] px-6 py-10">
             <div className="relative rounded-full bg-copper/10 p-2 shadow-[0_0_65px_rgba(201,128,61,0.12)]">
-              <Portrait eager alt="Portrait of Jackson Khuto" className="h-52 w-52 rounded-full border-[3px] border-copper/60 object-cover object-center shadow-2xl shadow-black/40 sm:h-60 sm:w-60" />
+              <Portrait eager alt={`Portrait of ${site.name}`} className="h-52 w-52 rounded-full border-[3px] border-copper/60 object-cover object-center shadow-2xl shadow-black/40 sm:h-60 sm:w-60" />
             </div>
           </div>
           <figcaption className="border-t border-line px-6 py-5">
-            <p className="text-lg font-semibold text-paper">{profile.name}</p>
-            <p className="mt-1 text-sm text-muted">Full-stack developer · Gauteng, South Africa</p>
+            <p className="text-lg font-semibold text-paper">{site.name}</p>
+            <p className="mt-1 text-sm text-muted">
+              {site.role} · {site.location}
+            </p>
             <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="What I build">
-              {['Internal tools', 'Approval workflows', 'Dashboards', 'Mobile apps'].map((item) => (
+              {site.heroTags.map((item) => (
                 <li key={item} className="rounded-full border border-line bg-ink px-2.5 py-1 font-mono text-[11px] text-muted">
                   {item}
                 </li>
@@ -764,27 +754,27 @@ const AboutPage = () => (
     <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
       <aside className="h-fit rounded-xl border border-line bg-panel p-6 lg:sticky lg:top-24">
         <div className="aspect-square overflow-hidden rounded-lg border border-line bg-[linear-gradient(135deg,#1E2228,#0B0E11)]">
-          <Portrait alt="Jackson Khuto" className="h-full w-full object-cover object-center" />
+          <Portrait alt={site.name} className="h-full w-full object-cover object-center" />
         </div>
         <dl className="mt-6 space-y-4 font-mono text-sm">
           <div>
             <dt className="text-[11px] uppercase tracking-[0.14em] text-slate">Education</dt>
-            <dd className="mt-1 text-paper">{education.degree}</dd>
+            <dd className="mt-1 text-paper">{site.education.degree}</dd>
             <dd className="text-muted">
-              {education.school} · {education.period}
+              {site.education.school} · {site.education.period}
             </dd>
           </div>
           <div>
             <dt className="text-[11px] uppercase tracking-[0.14em] text-slate">Based in</dt>
-            <dd className="mt-1 text-paper">{profile.location}</dd>
+            <dd className="mt-1 text-paper">{site.location}</dd>
           </div>
         </dl>
-        <a href={CV_PATH} download className={`${buttonClass('secondary')} mt-6 w-full justify-center`}>
+        <a href={site.cvPath} download className={`${buttonClass('secondary')} mt-6 w-full justify-center`}>
           Download CV
         </a>
       </aside>
       <div className="space-y-8">
-        <p className="text-pretty text-lg leading-9 text-muted">{profile.summary}</p>
+        <p className="text-pretty text-lg leading-9 text-muted">{site.summary}</p>
         <div className="grid gap-4 sm:grid-cols-2">
           {principles.map((principle, index) => (
             <article key={principle.title} className="rounded-xl border border-line bg-panel p-5">
@@ -795,68 +785,12 @@ const AboutPage = () => (
           ))}
         </div>
         <div className="rounded-xl border border-copper/30 bg-copper/5 p-6">
-          <h2 className="font-mono text-sm font-semibold text-copper">Current focus</h2>
+          <h2 className="font-mono text-sm font-semibold text-copper">What I keep sharpening</h2>
           <p className="mt-3 text-sm leading-7 text-muted">
-            Building stronger enterprise-grade React interfaces, deeper backend service design, Microsoft identity integrations, and deployment practices that make applications easier to support.
+            Enterprise-grade React interfaces, backend service design, Microsoft identity integrations, and deployment practices that make applications easier to support.
           </p>
         </div>
       </div>
-    </div>
-  </PageShell>
-);
-
-const ExperiencePage = () => (
-  <PageShell eyebrow="/experience" title="Enterprise delivery, grouped by impact." intro="The work I do across internal applications, identity, reporting, deployment support, and production maintenance.">
-    <div className="space-y-10">
-      {experience.map((job) => (
-        <article key={job.company} className="rounded-xl border border-line bg-panel p-6 md:p-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.14em] text-copper">{job.company}</p>
-              <h2 className="mt-2 text-2xl font-semibold text-paper">{job.role}</h2>
-              <p className="mt-2 font-mono text-xs text-slate">{job.location}</p>
-            </div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-xs text-muted">
-              {job.current && <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />}
-              {job.period}
-            </span>
-          </div>
-          <div className="mt-8 grid gap-4 lg:grid-cols-2">
-            {experienceImpactGroups.map((group, index) => {
-              const icons = [BriefcaseBusiness, ShieldCheck, Workflow, Sparkles];
-              const Icon = icons[index % icons.length];
-              return (
-                <Reveal key={group.title} delay={index * 80} className="h-full">
-                  <div className="h-full rounded-lg border border-line bg-ink p-5">
-                    <div className="flex items-center gap-3">
-                      <Icon size={17} className="text-copper" />
-                      <h3 className="font-mono text-sm font-semibold text-paper">{group.title}</h3>
-                    </div>
-                    <ul className="mt-5 space-y-3">
-                      {group.points.map((point) => (
-                        <li key={point} className="flex gap-2.5 text-sm leading-6 text-muted">
-                          <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-copper" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-        </article>
-      ))}
-      <article className="flex flex-wrap items-center gap-5 rounded-xl border border-line bg-panel p-6 md:p-8">
-        <span className="grid h-10 w-10 place-items-center rounded-full border border-line bg-ink text-copper">
-          <GraduationCap size={18} />
-        </span>
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.14em] text-copper">{education.school}</p>
-          <h2 className="mt-1 text-xl font-semibold text-paper">{education.degree}</h2>
-        </div>
-        <span className="ml-auto rounded-full border border-line px-3 py-1 font-mono text-xs text-muted">{education.period}</span>
-      </article>
     </div>
   </PageShell>
 );
@@ -1045,21 +979,21 @@ const ContactPage = () => {
       <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr]">
         <aside className="h-fit rounded-xl border border-line bg-panel p-6">
           <div className="space-y-4 font-mono text-sm text-muted">
-            <a href={`mailto:${profile.email}`} className="flex items-center gap-3 break-all hover:text-copper">
+            <a href={`mailto:${site.email}`} className="flex items-center gap-3 break-all hover:text-copper">
               <Mail size={16} className="shrink-0" />
-              {profile.email}
+              {site.email}
             </a>
-            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-copper">
+            <a href={site.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-copper">
               <GithubIcon size={16} />
-              github.com/jackson951
+              {githubHandle}
             </a>
-            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-copper">
+            <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-copper">
               <LinkedinIcon size={16} />
               LinkedIn profile
             </a>
             <span className="flex items-center gap-3">
               <MapPin size={16} />
-              {profile.location}
+              {site.location}
             </span>
           </div>
           <CopyEmailButton className="mt-6 w-full justify-center" />
@@ -1129,7 +1063,7 @@ const ContactPage = () => {
                 {status === 'error' && (
                   <>
                     {errorMessage || "Couldn't send right now."}{' '}
-                    <a href={`mailto:${profile.email}`} className="text-copper underline underline-offset-4">
+                    <a href={`mailto:${site.email}`} className="text-copper underline underline-offset-4">
                       Email me directly
                     </a>
                     .

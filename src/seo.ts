@@ -1,72 +1,68 @@
-import { profile, projects } from './data/portfolio';
+import { projects, site } from './data/site';
 
-export const SITE_URL = 'https://jackson-khuto-portfolio.vercel.app';
+export const SITE_URL = site.url;
 export const OG_IMAGE = `${SITE_URL}/og.jpg`;
 
-export type RouteKey = 'home' | 'services' | 'about' | 'experience' | 'projects' | 'project' | 'skills' | 'contact' | 'notfound';
+export type RouteKey = 'home' | 'services' | 'about' | 'projects' | 'project' | 'skills' | 'contact' | 'notfound';
 
 export const routeMeta: Record<RouteKey, { title: string; description: string }> = {
   home: {
-    title: 'Jackson Khuto — Software that takes the busywork off your team',
-    description:
-      'I build internal tools, approval workflows, dashboards and mobile apps for service and equipment businesses, replacing spreadsheets, email chains and paper job cards.',
+    title: `${site.name} — ${site.tagline.replace(/\.$/, '')}`,
+    description: site.description,
   },
   services: {
-    title: 'Services — Jackson Khuto',
+    title: `Services — ${site.name}`,
     description: 'Internal business tools, workflow automation, secure sign-in, APIs and integrations, dashboards and reporting, deployment and support.',
   },
   about: {
-    title: 'About — Jackson Khuto',
-    description: 'Jackson Khuto is a full-stack developer in Gauteng, South Africa, building internal business software. BSc IT, North-West University.',
+    title: `About — ${site.name}`,
+    description: `${site.name} is a ${site.role.toLowerCase()} in ${site.location}, building business applications for teams of any size and industry.`,
   },
-  experience: {
-    title: 'Experience — Jackson Khuto',
-    description: 'Internal business applications, approval workflows, identity and security, reporting, deployment and support.',
-  },
+
   projects: {
-    title: 'Projects — Jackson Khuto',
+    title: `Projects — ${site.name}`,
     description: 'Case studies: leave management, approval workflows, workflow automation and more, with the problem, the approach and the architecture.',
   },
   project: {
-    title: 'Project — Jackson Khuto',
-    description: 'Detailed case study for a Jackson Khuto software project.',
+    title: `Project — ${site.name}`,
+    description: `Detailed case study for a ${site.name} software project.`,
   },
   skills: {
-    title: 'Skills — Jackson Khuto',
+    title: `Skills — ${site.name}`,
     description: 'Frontend, backend, data, cloud, mobile and Power Platform skills used to build internal business software.',
   },
   contact: {
-    title: 'Contact — Jackson Khuto',
-    description: 'Tell Jackson Khuto what you need built: an internal tool, an approval workflow, a dashboard, an integration, or a full-stack role.',
+    title: `Contact — ${site.name}`,
+    description: `Tell ${site.name} what you need built: an internal tool, an approval workflow, a dashboard, an integration, or a full-stack role.`,
   },
   notfound: {
-    title: 'Page not found — Jackson Khuto',
+    title: `Page not found — ${site.name}`,
     description: 'This page does not exist.',
   },
 };
 
 /** Every URL that is prerendered to static HTML at build time. */
-export const staticPaths = ['/', '/services', '/projects', '/experience', '/skills', '/about', '/contact', ...projects.map((p) => p.path)];
+export const staticPaths = ['/', '/services', '/projects', '/skills', '/about', '/contact', ...projects.map((p) => p.path)];
 
 export const metaFor = (key: RouteKey, path: string) => {
   const project = key === 'project' ? projects.find((p) => p.path === path) : undefined;
-  const meta = project ? { title: `${project.name} case study — Jackson Khuto`, description: project.longDescription } : routeMeta[key];
+  const meta = project ? { title: `${project.name} case study — ${site.name}`, description: project.longDescription } : routeMeta[key];
   return { ...meta, url: `${SITE_URL}${path === '/' ? '/' : path}`, noindex: key === 'notfound' };
 };
 
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: profile.name,
-  jobTitle: 'Full-Stack Software Developer',
+  name: site.name,
+  jobTitle: site.role,
   description: routeMeta.home.description,
   url: SITE_URL,
   image: `${SITE_URL}/profile.jpg`,
-  email: `mailto:${profile.email}`,
-  alumniOf: { '@type': 'CollegeOrUniversity', name: 'North-West University' },
-  address: { '@type': 'PostalAddress', addressLocality: 'Midrand', addressRegion: 'Gauteng', addressCountry: 'ZA' },
-  sameAs: [profile.github, profile.linkedin],
-  knowsAbout: ['Internal business tools', 'Approval workflows', 'Dashboards and reporting', 'React', 'TypeScript', 'Node.js', 'ASP.NET Core', 'Microsoft Azure', 'Microsoft Entra ID'],
+  email: `mailto:${site.email}`,
+  alumniOf: { '@type': 'CollegeOrUniversity', name: site.education.school },
+  address: { '@type': 'PostalAddress', addressRegion: site.address.region, addressCountry: site.address.country },
+  sameAs: [site.github, site.linkedin],
+  knowsAbout: ['Internal business tools', 'Workflow automation', 'Dashboards and reporting', 'Systems integration', 'React', 'TypeScript', 'Node.js', 'ASP.NET Core', 'Microsoft Azure', 'Microsoft Entra ID'],
 };
 
 const escapeAttr = (value: string) => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -82,14 +78,15 @@ export const renderHead = (key: RouteKey, path: string) => {
     `<meta name="robots" content="${meta.noindex ? 'noindex' : 'index, follow'}" />`,
     meta.noindex ? '' : `<link rel="canonical" href="${meta.url}" />`,
     `<meta property="og:type" content="website" />`,
-    `<meta property="og:site_name" content="Jackson Khuto" />`,
+    `<meta name="author" content="${escapeAttr(site.name)}" />`,
+    `<meta property="og:site_name" content="${escapeAttr(site.name)}" />`,
     `<meta property="og:title" content="${t}" />`,
     `<meta property="og:description" content="${d}" />`,
     `<meta property="og:url" content="${meta.url}" />`,
     `<meta property="og:image" content="${OG_IMAGE}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
-    `<meta property="og:image:alt" content="Jackson Khuto: software that takes the busywork off your team" />`,
+    `<meta property="og:image:alt" content="${escapeAttr(`${site.name}: ${site.tagline}`)}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${t}" />`,
     `<meta name="twitter:description" content="${d}" />`,
@@ -109,7 +106,6 @@ export interface RouteState {
 const simpleRoutes: Record<string, RouteKey> = {
   '/services': 'services',
   '/about': 'about',
-  '/experience': 'experience',
   '/projects': 'projects',
   '/skills': 'skills',
   '/contact': 'contact',

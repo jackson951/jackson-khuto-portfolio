@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ArrowRight, Copy, CornerDownLeft, Download, FileText, Search } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './BrandIcons';
-import { profile, projects } from '../data/portfolio';
+import { githubHandle, projects, site } from '../data/site';
 
 interface Command {
   id: string;
@@ -52,12 +52,12 @@ export const CommandPalette = ({ open, onClose, onNavigate, pages }: CommandPale
         id: 'copy-email',
         group: 'Actions',
         label: 'Copy email address',
-        hint: profile.email,
+        hint: site.email,
         icon: <Copy size={15} />,
         run: () => {
-          navigator.clipboard?.writeText(profile.email).then(
+          navigator.clipboard?.writeText(site.email).then(
             () => setToast('Email copied to clipboard'),
-            () => setToast(profile.email),
+            () => setToast(site.email),
           );
         },
       },
@@ -69,7 +69,7 @@ export const CommandPalette = ({ open, onClose, onNavigate, pages }: CommandPale
         icon: <Download size={15} />,
         run: () => {
           const link = document.createElement('a');
-          link.href = '/Jackson_Khuto_CV.pdf';
+          link.href = site.cvPath;
           link.download = '';
           link.click();
           onClose();
@@ -79,10 +79,10 @@ export const CommandPalette = ({ open, onClose, onNavigate, pages }: CommandPale
         id: 'github',
         group: 'Actions',
         label: 'Open GitHub',
-        hint: 'github.com/jackson951',
+        hint: githubHandle,
         icon: <GithubIcon size={15} />,
         run: () => {
-          window.open(profile.github, '_blank', 'noopener,noreferrer');
+          window.open(site.github, '_blank', 'noopener,noreferrer');
           onClose();
         },
       },
@@ -92,7 +92,7 @@ export const CommandPalette = ({ open, onClose, onNavigate, pages }: CommandPale
         label: 'Open LinkedIn',
         icon: <LinkedinIcon size={15} />,
         run: () => {
-          window.open(profile.linkedin, '_blank', 'noopener,noreferrer');
+          window.open(site.linkedin, '_blank', 'noopener,noreferrer');
           onClose();
         },
       },

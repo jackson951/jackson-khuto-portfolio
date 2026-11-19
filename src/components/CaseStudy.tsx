@@ -1,6 +1,7 @@
 import { ArrowRight, ArrowUpRight, CheckCircle2 } from 'lucide-react';
-import { isPlaceholder, type CaseStudy as CaseStudyData } from '../data/caseStudies';
+import { isPlaceholder, type CaseStudy as CaseStudyData } from '../data/site';
 import { ArchitectureFlow } from './ArchitectureFlow';
+import { GithubIcon } from './BrandIcons';
 import { Link } from './Link';
 
 /** Highlights unfinished [placeholder] text in development; renders nothing for it in production. */
@@ -13,7 +14,7 @@ const Placeholder = ({ text }: { text: string }) =>
 
 const Media = ({ study }: { study: CaseStudyData }) => {
   if (study.media?.kind === 'image') {
-    return <img src={study.media.src} alt={study.media.alt} loading="lazy" decoding="async" className="h-full w-full rounded-lg border border-line object-cover" />;
+    return <img src={study.media.src} alt={study.media.alt} loading="lazy" decoding="async" width={1200} height={640} className="h-auto w-full rounded-lg border border-line" />;
   }
   if (study.media?.kind === 'video') {
     return (
@@ -73,10 +74,9 @@ export const CaseStudy = ({ study, index }: { study: CaseStudyData; index: numbe
         </div>
 
         <div className="flex flex-col gap-5">
-          <div className="min-h-[12rem] flex-1">
+          <div className={study.media?.kind === 'image' ? 'flex flex-1 items-center' : 'min-h-[12rem] flex-1'}>
             <Media study={study} />
           </div>
-          {study.note && <p className="text-xs italic text-slate">{study.note}</p>}
         </div>
       </div>
 
@@ -88,16 +88,23 @@ export const CaseStudy = ({ study, index }: { study: CaseStudyData; index: numbe
             </li>
           ))}
         </ul>
-        {study.link &&
-          (study.link.external ? (
-            <a href={study.link.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-mono text-sm text-paper transition hover:text-copper">
-              {study.link.label} <ArrowUpRight size={15} />
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          {study.liveUrl && (
+            <a href={study.liveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-sm text-copper transition hover:text-copper-bright">
+              Live demo <ArrowUpRight size={15} aria-hidden="true" />
             </a>
-          ) : (
-            <Link to={study.link.href} className="inline-flex items-center gap-2 font-mono text-sm text-paper transition hover:text-copper">
-              {study.link.label} <ArrowRight size={15} />
-            </Link>
+          )}
+          {study.repos.map((repo) => (
+            <a key={repo.url} href={repo.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-sm text-muted transition hover:text-copper">
+              <GithubIcon size={15} /> {repo.label}
+            </a>
           ))}
+          {study.link && (
+            <Link to={study.link.href} className="inline-flex items-center gap-1.5 font-mono text-sm text-paper transition hover:text-copper">
+              {study.link.label} <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+          )}
+        </div>
       </footer>
     </article>
   );

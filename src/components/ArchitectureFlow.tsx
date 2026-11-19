@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import type { Project } from '../data/portfolio';
+import type { Project } from '../data/site';
 
 interface ArchitectureFlowProps {
   flow: Project['flow'];

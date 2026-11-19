@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Command, Download, Mail, Menu, X } from 'lucide-react';
 import { Link } from './Link';
-import { bookChatHref } from '../data/portfolio';
+import { bookChatHref, site } from '../data/site';
+import { Logo } from './Logo';
 
 interface NavItem {
   label: string;
@@ -45,8 +46,8 @@ export const Header = ({ currentPath, navItems, onOpenPalette }: HeaderProps) =>
         Skip to content
       </a>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-5 px-6 py-4">
-        <Link to="/" className="font-mono text-sm font-semibold text-paper" aria-label="Jackson Khuto, home">
-          jackson<span className="text-copper">.</span>khuto
+        <Link to="/" className="font-mono text-sm font-semibold text-paper" aria-label={`${site.name}, home`}>
+          <Logo />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
@@ -76,7 +77,7 @@ export const Header = ({ currentPath, navItems, onOpenPalette }: HeaderProps) =>
             <Command size={14} />
             <span className="hidden sm:inline">K</span>
           </button>
-          <a href="/Jackson_Khuto_CV.pdf" download className="hidden items-center gap-2 rounded-md border border-line px-3 py-2 font-mono text-xs text-paper transition-colors hover:border-copper hover:text-copper md:inline-flex">
+          <a href={site.cvPath} download className="hidden items-center gap-2 rounded-md border border-line px-3 py-2 font-mono text-xs text-paper transition-colors hover:border-copper hover:text-copper md:inline-flex">
             <Download size={15} />
             CV
           </a>
@@ -106,7 +107,7 @@ export const Header = ({ currentPath, navItems, onOpenPalette }: HeaderProps) =>
               </Link>
             );
           })}
-          <a href="/Jackson_Khuto_CV.pdf" download className="mt-3 inline-flex items-center justify-center gap-2 rounded-md border border-line px-3 py-3 font-mono text-sm text-paper transition-colors hover:border-copper hover:text-copper">
+          <a href={site.cvPath} download className="mt-3 inline-flex items-center justify-center gap-2 rounded-md border border-line px-3 py-3 font-mono text-sm text-paper transition-colors hover:border-copper hover:text-copper">
             <Download size={16} />
             Download CV
           </a>
